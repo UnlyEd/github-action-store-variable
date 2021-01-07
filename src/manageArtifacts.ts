@@ -5,8 +5,7 @@
  *  1: Retrieve value from variable "key"
  */
 import {VariableDetail, VariableStatus} from "./types/variableStatus";
-import artifact, {UploadOptions} from '@actions/artifact';
-import {ArtifactClient} from "@actions/artifact/lib/internal/artifact-client";
+import artifact, {ArtifactClient, UploadOptions} from '@actions/artifact';
 import {join} from 'path';
 import {readFileSync, mkdirSync, writeFileSync} from 'fs';
 import rimraf from 'rimraf';
@@ -38,6 +37,8 @@ const defineVariableOperation = (variable: string): VariableStatus => {
 }
 
 const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
+    const artifact = require('@actions/artifact');
+
     const client: ArtifactClient = artifact.create();
     const artifactOptions: UploadOptions = {
         retentionDays: 1 // Only keep artifacts 1 day to avoid reach limit: https://github.com/actions/toolkit/blob/c861dd8859fe5294289fcada363ce9bc71e9d260/packages/artifact/src/internal/upload-options.ts#L1
