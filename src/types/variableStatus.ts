@@ -5,5 +5,5 @@ export type VariableStatus = {
 
 export type VariableDetail = {
     key: string,
-    value?: string
+    value: string
 }

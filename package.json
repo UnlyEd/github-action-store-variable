@@ -32,9 +32,12 @@
   "author": "UnlyEd",
   "license": "MIT",
   "dependencies": {
+    "@actions/artifact": "^0.5.0",
     "@actions/core": "1.2.6",
+    "@types/rimraf": "^3.0.0",
     "eslint-plugin-prettier": "3.2.0",
-    "node-fetch": "2.6.1"
+    "node-fetch": "2.6.1",
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@babel/parser": "7.12.10",

@@ -5,6 +5,13 @@
  *  1: Retrieve value from variable "key"
  */
 import {VariableDetail, VariableStatus} from "./types/variableStatus";
+import artifact, {UploadOptions} from '@actions/artifact';
+import {ArtifactClient} from "@actions/artifact/lib/internal/artifact-client";
+import {join} from 'path';
+import {readFileSync, mkdirSync, writeFileSync} from 'fs';
+import rimraf from 'rimraf';
+
+import {WORKDIR} from "./config";
 
 const defineVariableOperation = (variable: string): VariableStatus => {
     try {
@@ -30,7 +37,30 @@ const defineVariableOperation = (variable: string): VariableStatus => {
     }
 }
 
-const manageArtifacts = (variables: string, delimiter: string): void => {
+const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
+    const client: ArtifactClient = artifact.create();
+    const artifactOptions: UploadOptions = {
+        retentionDays: 1 // Only keep artifacts 1 day to avoid reach limit: https://github.com/actions/toolkit/blob/c861dd8859fe5294289fcada363ce9bc71e9d260/packages/artifact/src/internal/upload-options.ts#L1
+    }
+    const artifactsUploadPromises: Promise<any>[] = [];
+
+    console.log(variables);
+
+    for (const variable of variables) {
+        const file = join(WORKDIR, `${variable.key}.txt`);
+
+        // cleanup old directories if needed
+        rimraf.sync(WORKDIR);
+        mkdirSync(WORKDIR);
+
+        writeFileSync(file, variable.value, {encoding: 'utf8'});
+        artifactsUploadPromises.push(client.uploadArtifact(variable.value, [file], process.cwd(), artifactOptions));
+    }
+    const uploadResponses = await Promise.all(artifactsUploadPromises);
+    console.log(uploadResponses);
+}
+
+const manageArtifacts = async (variables: string, delimiter: string): Promise<void> => {
     const variablesDetail: VariableStatus[] = [];
     for (const variable of variables.split(delimiter)) {
         try {
@@ -39,7 +69,8 @@ const manageArtifacts = (variables: string, delimiter: string): void => {
             console.log(error)
         }
     }
-    console.log(variablesDetail);
+    await storeArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 0)
+        .map((variable: VariableStatus) => variable.variableDetail));
 }
 
 export default manageArtifacts;
