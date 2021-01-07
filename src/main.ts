@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { DEFAULT_TIMEOUT } from './config';
+import manageArtifacts from './manageArtifacts';
 
 /**
  * Runs configuration checks to make sure everything is properly configured.
@@ -26,7 +26,10 @@ const run = (): void => {
 
   try {
     const variables: string = core.getInput('variables');
-    core.debug(`Variables to retrieve OR set: ${variables}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true https://github.com/actions/toolkit/blob/master/docs/action-debugging.md#how-to-access-step-debug-logs
+    const delimiter: string = core.getInput('delimiter');
+    core.debug(`Received variables: ${variables}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true https://github.com/actions/toolkit/blob/master/docs/action-debugging.md#how-to-access-step-debug-logs
+    core.debug(`Using delimiter: "${delimiter}"`);
+    manageArtifacts(variables, delimiter);
   } catch (error) {
     core.setFailed(error.message);
   }
