@@ -63,7 +63,7 @@ const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
 
 const manageArtifacts = async (variables: string, delimiter: string): Promise<void> => {
     const variablesDetail: VariableStatus[] = [];
-    for (const variable of variables.split(delimiter)) {
+    for (const variable of variables.split(/\r?\n/)) {
         console.log("Debugging received line: ", variable);
         try {
             variablesDetail.push(defineVariableOperation(variable));

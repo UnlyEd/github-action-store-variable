@@ -10,7 +10,7 @@ inputs:
   delimiter:
     description: 'Parsing split character'
     required: false
-    default: /\r?\n/
+    default: "\n"
 outputs:
   variablesObject:
     description: 'Object containing values keys and values'
