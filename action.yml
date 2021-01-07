@@ -1,0 +1,19 @@
+name: 'Store variables'
+description: 'Store and retrieve previous informations from your jobs'
+branding:
+  icon: bookmark
+  color: red
+inputs:
+  variables:
+    description: 'Store: VAR=VALUE,OTHER_VAR=VALUE | Retrieve: VAR,OTHER_VALUE'
+    required: true
+  delimiter:
+    description: 'Parsing split character'
+    required: false
+    default: ','
+outputs:
+  deploymentDetails:
+    variables: 'Object containing variables keys and values'
+runs:
+  using: 'node12'
+  main: 'lib/main.js'

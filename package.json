@@ -1,0 +1,56 @@
+{
+  "name": "github-action-await-vercel",
+  "private": true,
+  "description": "GitHub Action - Awaits for a Vercel deployment to be ready",
+  "homepage": "https://github.com/UnlyEd/github-action-store-variable",
+  "main": "lib/main.js",
+  "scripts": {
+    "start": "yarn build",
+    "build": "tsc --watch",
+    "build:once": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format:preview": "prettier --check **/*.ts",
+    "lint": "eslint src/**/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "bump:major": "git commit --allow-empty -m \"(MAJOR) Fake commit, bumps major version\"",
+    "bump:minor": "git commit --allow-empty -m \"(MINOR) Fake commit, bumps minor version\"",
+    "test": "NODE_ENV=test jest --watch",
+    "test:once": "NODE_ENV=test jest",
+    "test:coverage": "NODE_ENV=test jest --coverage",
+    "test:config": "NODE_ENV=test jest --showConfig",
+    "act:actions:list": "act --version && act --list"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UnlyEd/github-action-store-variable.git"
+  },
+  "keywords": [
+    "github",
+    "github actions",
+    "actions"
+  ],
+  "author": "UnlyEd",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "1.2.6",
+    "eslint-plugin-prettier": "3.2.0",
+    "node-fetch": "2.6.1"
+  },
+  "devDependencies": {
+    "@babel/parser": "7.12.10",
+    "@types/jest": "26.0.15",
+    "@types/node": "14.14.9",
+    "@types/node-fetch": "2.5.7",
+    "@typescript-eslint/parser": "4.8.1",
+    "@vercel/ncc": "0.25.1",
+    "eslint": "7.13.0",
+    "eslint-plugin-github": "4.1.1",
+    "eslint-plugin-jest": "23.20.0",
+    "jest": "24.9.0",
+    "jest-circus": "26.4.2",
+    "js-yaml": "3.14.0",
+    "prettier": "2.1.1",
+    "ts-jest": "24.3.0",
+    "typescript": "4.0.2"
+  }
+}
