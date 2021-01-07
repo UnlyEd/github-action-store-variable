@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - uses: ./
+      - name: Create pull-request against master
+        uses: ./
         with:
-          # Testing whether some existing vercel deployment is properly deployed
           variables: |
             VAR=TEST
             ANOTHER
