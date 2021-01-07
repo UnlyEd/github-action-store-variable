@@ -13,7 +13,7 @@ inputs:
     default: ','
 outputs:
   variablesObject:
-    description: 'Object containing variables keys and values'
+    description: 'Object containing values keys and values'
 runs:
   using: 'node12'
   main: 'lib/main.js'
