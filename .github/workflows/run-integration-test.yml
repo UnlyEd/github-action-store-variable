@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+      -
       - uses: ./
         with:
           variables: |
             VAR=TEST
-            ANOTHER
-            LAST=teSt
+            LAST=ANOTHER
