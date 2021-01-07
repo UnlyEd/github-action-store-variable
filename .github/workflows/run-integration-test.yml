@@ -18,8 +18,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - name: Create pull-request against master
-        uses: ./
+      - uses: ./
         with:
           variables: |
             VAR=TEST

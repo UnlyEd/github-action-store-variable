@@ -12,8 +12,8 @@ inputs:
     required: false
     default: ','
 outputs:
-  deploymentDetails:
-    variables: 'Object containing variables keys and values'
+  variables:
+    description: 'Object containing variables keys and values'
 runs:
   using: 'node12'
   main: 'lib/main.js'
