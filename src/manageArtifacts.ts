@@ -10,6 +10,7 @@ import * as core from '@actions/core';
 import {VariableDetail, VariableStatus} from "./types/variableStatus";
 import {WORKDIR} from "./config";
 import {ArtifactClient, UploadOptions} from "@actions/artifact";
+import rimraf from "rimraf";
 
 const artifact = require('@actions/artifact');
 const io = require('@actions/io');
@@ -48,6 +49,8 @@ const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
     console.log(variables);
 
     for (const variable of variables) {
+        rimraf.sync(WORKDIR);
+        mkdirSync(WORKDIR);
         const file: string = join(WORKDIR, `${variable.key}.txt`);
 
         writeFileSync(file, variable.value, {encoding: 'utf8'});
@@ -62,6 +65,8 @@ const retrieveArtifact = async (variables: VariableDetail[]): Promise<void> => {
 
     for (const variable of variables) {
         try {
+            rimraf.sync(WORKDIR);
+            mkdirSync(WORKDIR);
             const file = join(WORKDIR, `${variable.key}.txt`);
             await client.downloadAllArtifacts(variable.key);
             variable.value = readFileSync(file, {encoding: 'utf8'}).toString();
@@ -72,9 +77,8 @@ const retrieveArtifact = async (variables: VariableDetail[]): Promise<void> => {
 }
 
 const manageArtifacts = async (variables: string, delimiter: string): Promise<void> => {
-    const io = require('@actions/io');
-    await io.mkdirP(WORKDIR);
     const variablesDetail: VariableStatus[] = [];
+
     for (const variable of variables.split(/\r?\n/)) {
         console.log("Debugging received line: ", variable);
         try {
