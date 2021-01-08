@@ -46,11 +46,10 @@ const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
     }
     const artifactsUploadPromises: Promise<any>[] = [];
 
-    console.log(variables);
+    rimraf.sync(WORKDIR);
+    mkdirSync(WORKDIR);
 
     for (const variable of variables) {
-        rimraf.sync(WORKDIR);
-        mkdirSync(WORKDIR);
         const file: string = join(WORKDIR, `${variable.key}.txt`);
 
         writeFileSync(file, variable.value, {encoding: 'utf8'});
