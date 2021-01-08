@@ -19,21 +19,27 @@ const runConfigChecks = () => {
 /**
  * Runs the GitHub Action.
  */
-const run = (): void => {
+const run = async (): Promise<void> => {
   if (!core.isDebug()) {
     core.info('Debug mode is disabled. Read more at https://github.com/UnlyEd/github-action-await-vercel#how-to-enable-debug-logs');
   }
 
   try {
+    console.log(core.getState("foo"));
+    core.saveState("foo", "bar");
     const variables: string = core.getInput('variables');
     const delimiter: string = core.getInput('delimiter');
     core.debug(`Received variables: ${variables}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true https://github.com/actions/toolkit/blob/master/docs/action-debugging.md#how-to-access-step-debug-logs
     core.debug(`Using delimiter: "${delimiter}"`);
-    manageArtifacts(variables, delimiter);
+    await manageArtifacts(variables, delimiter);
   } catch (error) {
     core.setFailed(error.message);
   }
 };
 
 //runConfigChecks();
-run();
+run().then(actionReturn => {
+  core.
+}).catch(error => {
+  core.setFailed(error);
+});
