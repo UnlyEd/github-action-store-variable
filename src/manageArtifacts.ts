@@ -97,7 +97,7 @@ const manageArtifacts = async (variables: string, delimiter: string): Promise<vo
     console.log("After:")
     console.log(variablesDetail)
 
-    const variablesResult = variablesDetail.reduce((variablesObject, variableToExport) => ({...variablesObject, [variableToExport.detail.key]: variableToExport.detail.value}));
+    const variablesResult = variablesDetail.reduce((variablesObject, variableToExport) => ({...variablesObject, [variableToExport.detail.key]: variableToExport.detail.value}), {});
     core.info(`variables contains: ${variablesResult}`);
     core.setOutput("variables", variablesResult);
 }
