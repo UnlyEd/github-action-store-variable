@@ -25,12 +25,12 @@ const defineVariableOperation = (variable: string): VariableStatus => {
         if (typeof variableContent.key !== 'undefined' && typeof variableContent.value !== 'undefined') {
             return {
                 operationToProceed: 0,
-                variableDetail: variableContent
+                detail: variableContent
             }
         } else if (typeof variableContent.key !== undefined) {
             return {
                 operationToProceed: 1,
-                variableDetail: variableContent
+                detail: variableContent
             }
         } else {
             throw Error(`Both key and value are empty`)
@@ -91,11 +91,15 @@ const manageArtifacts = async (variables: string, delimiter: string): Promise<vo
     console.log("Before:")
     console.log(variablesDetail)
     await storeArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 0)
-        .map((variable: VariableStatus) => variable.variableDetail));
+        .map((variable: VariableStatus) => variable.detail));
     await retrieveArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 1)
-        .map((variable: VariableStatus) => variable.variableDetail));
+        .map((variable: VariableStatus) => variable.detail));
     console.log("After:")
     console.log(variablesDetail)
+
+    const variablesResult = variablesDetail.reduce((variables, variable) => ({...variables, [variable.detail.key]: variable.detail.value}));
+    core.info(`variables contains: ${variablesResult}`);
+    core.setOutput("variables", variablesResult);
 }
 
 export default manageArtifacts;

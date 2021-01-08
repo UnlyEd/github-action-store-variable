@@ -1,6 +1,6 @@
 export type VariableStatus = {
     operationToProceed: number,
-    variableDetail: VariableDetail
+    detail: VariableDetail
 }
 
 export type VariableDetail = {
