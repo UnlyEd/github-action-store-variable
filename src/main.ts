@@ -39,7 +39,6 @@ const run = async (): Promise<void> => {
 
 //runConfigChecks();
 run().then(actionReturn => {
-  core.
 }).catch(error => {
   core.setFailed(error);
 });
