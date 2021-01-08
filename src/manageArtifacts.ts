@@ -6,6 +6,7 @@
  */
 import {VariableDetail, VariableStatus} from "./types/variableStatus";
 import artifact, {ArtifactClient, UploadOptions} from '@actions/artifact';
+import io from '@actions/io';
 import {join} from 'path';
 import {readFileSync, mkdirSync, writeFileSync} from 'fs';
 import rimraf from 'rimraf';
@@ -50,18 +51,16 @@ const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
     for (const variable of variables) {
         const file = join(WORKDIR, `${variable.key}.txt`);
 
-        // cleanup old directories if needed
-        rimraf.sync(WORKDIR);
-        mkdirSync(WORKDIR);
-
         writeFileSync(file, variable.value, {encoding: 'utf8'});
-        artifactsUploadPromises.push(client.uploadArtifact(variable.value, [file], process.cwd(), artifactOptions));
+        artifactsUploadPromises.push(client.uploadArtifact(variable.key, [file], process.cwd(), artifactOptions));
     }
     const uploadResponses = await Promise.all(artifactsUploadPromises);
     console.log(uploadResponses);
 }
 
 const manageArtifacts = async (variables: string, delimiter: string): Promise<void> => {
+    const io = require('@actions/io');
+    await io.mkdirP(WORKDIR);
     const variablesDetail: VariableStatus[] = [];
     for (const variable of variables.split(/\r?\n/)) {
         console.log("Debugging received line: ", variable);

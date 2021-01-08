@@ -25,9 +25,6 @@ const run = async (): Promise<void> => {
   }
 
   try {
-    console.log(core.getState("foo"));
-    core.saveState("foo", "bar");
-    return;
     const variables: string = core.getInput('variables');
     const delimiter: string = core.getInput('delimiter');
     core.debug(`Received variables: ${variables}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true https://github.com/actions/toolkit/blob/master/docs/action-debugging.md#how-to-access-step-debug-logs
