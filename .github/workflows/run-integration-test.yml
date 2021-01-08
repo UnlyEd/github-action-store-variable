@@ -46,7 +46,7 @@ jobs:
           SECOND_URL: ${{ fromJson(steps.store-variables.outputs.variables).SECOND_URL }}
   third-test:
     runs-on: ubuntu-18.04
-    needs: run-integration-test
+    needs: second-test
     steps:
       - uses: actions/checkout@v2
       - uses: ./
