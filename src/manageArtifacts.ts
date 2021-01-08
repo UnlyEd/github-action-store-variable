@@ -68,7 +68,7 @@ const retrieveArtifact = async (variables: VariableDetail[]): Promise<void> => {
     for (const variable of variables) {
         try {
             const file = join(WORKDIR, `${variable.key}.txt`);
-            await client.downloadAllArtifacts(variable.key);
+            await client.downloadArtifact(variable.key);
             variable.value = readFileSync(file, {encoding: 'utf8'}).toString();
         } catch (error) {
             core.warning(`Cannot retrieve variable ${variable.key}`)
