@@ -1,11 +1,11 @@
 name: 'Store variables'
-description: 'Store and retrieve previous informations from your jobs'
+description: 'Easily persist and read variables to reuse them between GitHub Action jobs'
 branding:
   icon: bookmark
   color: red
 inputs:
   variables:
-    description: 'Store: VAR=VALUE,OTHER_VAR=VALUE | Retrieve: VAR,OTHER_VALUE'
+    description: 'Write variable: `VAR=VALUE` | Read variable: `VAR`'
     required: true
   delimiter:
     description: 'Regex delimiter between each variable'
@@ -14,7 +14,7 @@ inputs:
   failIfNotFound:
     description: "If true, will throw an error (and crash CI) when attempting to read a variable that doesn't exist in the store"
     required: false
-    default: false
+    default: 'false'
 runs:
   using: 'node12'
   main: 'lib/main.js'
