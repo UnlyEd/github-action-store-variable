@@ -40,7 +40,7 @@ const defineVariableOperation = (variable: string): VariableStatus => {
     }
 }
 
-const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
+const storeArtifact = async (variables: VariableDetail[], failOnUnreachable: boolean): Promise<void> => {
     const client: ArtifactClient = artifact.create();
     const artifactOptions: UploadOptions = {
         retentionDays: 1 // Only keep artifacts 1 day to avoid reach limit: https://github.com/actions/toolkit/blob/c861dd8859fe5294289fcada363ce9bc71e9d260/packages/artifact/src/internal/upload-options.ts#L1
@@ -56,11 +56,19 @@ const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
         writeFileSync(file, variable.value, {encoding: 'utf8'});
         artifactsUploadPromises.push(client.uploadArtifact(variable.key, [file], process.cwd(), artifactOptions));
     }
-    const uploadResponses = await Promise.all(artifactsUploadPromises);
-    console.log(uploadResponses);
+    try {
+        const uploadResponses = await Promise.all(artifactsUploadPromises);
+    } catch (error) {
+        const message: string = `Error while uploading artifact: ${error?.message}`
+        if (failOnUnreachable) {
+            core.setFailed(message);
+        } else {
+            core.warning(message);
+        }
+    }
 }
 
-const retrieveArtifact = async (variables: VariableDetail[]): Promise<void> => {
+const retrieveArtifact = async (variables: VariableDetail[], failOnUnreachable: boolean): Promise<void> => {
     const client: ArtifactClient = artifact.create();
 
     rimraf.sync(WORKDIR);
@@ -71,13 +79,17 @@ const retrieveArtifact = async (variables: VariableDetail[]): Promise<void> => {
             await client.downloadArtifact(variable.key);
             variable.value = readFileSync(file, {encoding: 'utf8'}).toString();
         } catch (error) {
-            core.warning(`Cannot retrieve variable ${variable.key}`)
-            console.error(error);
+            const message: string = `Cannot retrieve variable ${variable.key}`
+            if (failOnUnreachable) {
+                core.setFailed(message);
+            } else {
+                core.warning(message);
+            }
         }
     }
 }
 
-const manageArtifacts = async (variables: string, delimiter: string): Promise<void> => {
+const manageArtifacts = async (variables: string, delimiter: string, failOnUnreachable: boolean): Promise<void> => {
     const variablesDetail: VariableStatus[] = [];
 
     for (const variable of variables.split(new RegExp(delimiter))) {
@@ -88,9 +100,9 @@ const manageArtifacts = async (variables: string, delimiter: string): Promise<vo
         }
     }
     await storeArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 0)
-        .map((variable: VariableStatus) => variable.detail));
+        .map((variable: VariableStatus) => variable.detail), failOnUnreachable);
     await retrieveArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 1)
-        .map((variable: VariableStatus) => variable.detail));
+        .map((variable: VariableStatus) => variable.detail), failOnUnreachable);
 
     const variablesResult = variablesDetail.reduce((variablesObject, variableToExport) => ({
         ...variablesObject,

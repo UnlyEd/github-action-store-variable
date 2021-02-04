@@ -61,3 +61,13 @@ jobs:
         env:
           URL: ${{ fromJson(steps.store-variables.outputs.variables).URL }}
           SECOND_URL: ${{ fromJson(steps.store-variables.outputs.variables).SECOND_URL }}
+
+  should-not-fail-on-retrieving:
+    runs-on: ubuntu-18.04
+    steps:
+      - actions/checkout@v2
+      - uses: ./
+        with:
+          variables: |
+            RANDOM_VAR
+          failOnUnreachable: false # default is false

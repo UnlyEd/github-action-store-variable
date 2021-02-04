@@ -11,6 +11,10 @@ inputs:
     description: 'Regex defining the delimiter'
     required: false
     default: "\\r?\\n"
+  failOnUnreachable:
+    description: 'Crash CI in case a variable cannot be find'
+    required: false
+    default: false
 outputs:
   variablesObject:
     description: 'Object containing values keys and values'
