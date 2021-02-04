@@ -2,8 +2,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/9e073b5db2eec4c4e5c8/maintainability)](https://codeclimate.com/github/UnlyEd/github-action-store-variable/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/9e073b5db2eec4c4e5c8/test_coverage)](https://codeclimate.com/github/UnlyEd/github-action-store-variable/test_coverage)
 
-![GitHub Action integration test](https://github.com/UnlyEd/github-action-store-variable/workflows/Run%20integration%20test/badge.svg)
-![GitHub Action build test](https://github.com/UnlyEd/github-action-store-variable/workflows/Checks%20if%20the%20Action%20builds%20correctly/badge.svg)
+![GitHub Action integration test](https://github.com/UnlyEd/github-action-store-variable/workflows/GitHub%20Action%20integration%20test/badge.svg)
+![GitHub Action build test](https://github.com/UnlyEd/github-action-store-variable/workflows/GitHub%20Action%20build%20test/badge.svg)
 ![Update Code Climate test coverage](https://github.com/UnlyEd/github-action-store-variable/workflows/Update%20Code%20Climate%20test%20coverage/badge.svg)
 
 # GitHub Action - Store variables between your jobs
