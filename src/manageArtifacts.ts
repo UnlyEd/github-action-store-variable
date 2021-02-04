@@ -40,7 +40,7 @@ const defineVariableOperation = (variable: string): VariableStatus => {
     }
 }
 
-const storeArtifact = async (variables: VariableDetail[], failOnUnreachable: boolean): Promise<void> => {
+const storeArtifact = async (variables: VariableDetail[], failIfNotFound: boolean): Promise<void> => {
     const client: ArtifactClient = artifact.create();
     const artifactOptions: UploadOptions = {
         retentionDays: 1 // Only keep artifacts 1 day to avoid reach limit: https://github.com/actions/toolkit/blob/c861dd8859fe5294289fcada363ce9bc71e9d260/packages/artifact/src/internal/upload-options.ts#L1
@@ -64,7 +64,7 @@ const storeArtifact = async (variables: VariableDetail[], failOnUnreachable: boo
         }
     } catch (error) {
         const message: string = `Error while uploading artifact: ${error?.message}`
-        if (failOnUnreachable) {
+        if (failIfNotFound) {
             core.setFailed(message);
         } else {
             core.warning(message);
@@ -72,7 +72,7 @@ const storeArtifact = async (variables: VariableDetail[], failOnUnreachable: boo
     }
 }
 
-const retrieveArtifact = async (variables: VariableDetail[], failOnUnreachable: boolean): Promise<void> => {
+const retrieveArtifact = async (variables: VariableDetail[], failIfNotFound: boolean): Promise<void> => {
     const client: ArtifactClient = artifact.create();
 
     rimraf.sync(WORKDIR);
@@ -86,7 +86,7 @@ const retrieveArtifact = async (variables: VariableDetail[], failOnUnreachable: 
             core.debug(`Exported ${variable.key}=${variable.value}`);
         } catch (error) {
             const message: string = `Cannot retrieve variable ${variable.key}`
-            if (failOnUnreachable) {
+            if (failIfNotFound) {
                 core.setFailed(message);
             } else {
                 core.warning(message);
@@ -95,7 +95,7 @@ const retrieveArtifact = async (variables: VariableDetail[], failOnUnreachable: 
     }
 }
 
-const manageArtifacts = async (variables: string, delimiter: string, failOnUnreachable: boolean): Promise<void> => {
+const manageArtifacts = async (variables: string, delimiter: string, failIfNotFound: boolean): Promise<void> => {
     const variablesDetail: VariableStatus[] = [];
 
     for (const variable of variables.split(new RegExp(delimiter))) {
@@ -106,9 +106,9 @@ const manageArtifacts = async (variables: string, delimiter: string, failOnUnrea
         }
     }
     await storeArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 0)
-        .map((variable: VariableStatus) => variable.detail), failOnUnreachable);
+        .map((variable: VariableStatus) => variable.detail), failIfNotFound);
     await retrieveArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 1)
-        .map((variable: VariableStatus) => variable.detail), failOnUnreachable);
+        .map((variable: VariableStatus) => variable.detail), failIfNotFound);
 
     const variablesResult = variablesDetail.reduce((variablesObject, variableToExport) => ({
         ...variablesObject,

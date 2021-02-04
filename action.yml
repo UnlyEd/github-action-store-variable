@@ -11,7 +11,7 @@ inputs:
     description: 'Regex defining the delimiter'
     required: false
     default: "\\r?\\n"
-  failOnUnreachable:
+  failIfNotFound:
     description: 'Crash CI in case a variable cannot be find'
     required: false
     default: false
