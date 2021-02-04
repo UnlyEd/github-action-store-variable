@@ -32,7 +32,7 @@ jobs:
 
       # XXX We recommend to export all your variables at once, at the end of your job
       - name: Export variable for next jobs
-        uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+        uses: UnlyEd/github-action-store-variable@v2.1.0 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           # Persist (store) our MAGIC_NUMBER ENV variable into our store, for the next jobs
           variables: |
@@ -45,7 +45,7 @@ jobs:
     needs: compute-data
     steps:
       - name: Import variable MAGIC_NUMBER
-        uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+        uses: UnlyEd/github-action-store-variable@v2.1.0 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           # List all variables you want to retrieve from the store
           # XXX They'll be automatically added to your ENV
@@ -102,7 +102,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
 
 ```yaml
 - name: Export one variable
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     variables: FOO=BAR
 ```
@@ -111,7 +111,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
 
 ```yaml
 - name: Export many variables
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     variables: |
       FOO=BAR
@@ -124,7 +124,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
 
 ```yaml
 - name: Export one variable
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     # Writes "FOO" and reads "STAGE"
     variables: |
@@ -136,7 +136,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
 
 ```yaml
 - name: Export many variables
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     delimiter: ':'
     variables: FOO=BAR:STAGE=production
@@ -146,7 +146,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
 
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     variables: FOO
 ```
@@ -155,7 +155,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
 
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     variables: |
       FOO
@@ -166,7 +166,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
 
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     delimiter: ';'
     variables: FOO;STAGE
@@ -176,7 +176,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
 
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     failIfNotFound: true
     variables: WRONG_VARIABLE
