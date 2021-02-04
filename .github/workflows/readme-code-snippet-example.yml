@@ -6,29 +6,32 @@
 
 name: 'GitHub Action code snippet'
 on:
-  pull_request:
   push:
     branches:
-      - main
-      - 'releases/*'
+      - '*'
 jobs:
+  # On some job, do some stuff an persist variables meant to be re-used in other jobs
   compute-data:
     name: Compute data
     runs-on: ubuntu-18.04
     steps:
+      # Do you own internal business logic...
       - name: Compute ressource
         run: |
           MAGIC_NUMBER=42
           echo "Found universal answer: $MAGIC_NUMBER"
-          echo "Exporting it..."
+          echo "Exporting it as ENV variable..."
           echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
 
+      # XXX We recommend to export all your variables at once, at the end of your job
       - name: Export variable for next jobs
         uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
         with:
+          # Persist (store) our MAGIC_NUMBER ENV variable into our store, for the next jobs
           variables: |
             MAGIC_NUMBER=${{ env.MAGIC_NUMBER }}
 
+  # In another job, read the previously stored variable and use it
   retrieve-data:
     name: Find & re-use data
     runs-on: ubuntu-18.04
@@ -37,8 +40,10 @@ jobs:
       - name: Import variable MAGIC_NUMBER
         uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
         with:
-          variables: MAGIC_NUMBER
-          failIfNotFound: true
+          # List all variables you want to retrieve from the store
+          # XXX They'll be automatically added to your ENV
+          variables: |
+            MAGIC_NUMBER
       - name: Debug output
         run: echo "We have access to $MAGIC_NUMBER"
 
