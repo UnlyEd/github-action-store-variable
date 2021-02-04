@@ -26,9 +26,9 @@ The variables stored can be read by any job within the same workflow.
 
 ## Why/when should you use it?
 
-If you need to **re-use variables defined in a job in other** (subsequent) jobs, then you can use this action.
-
 GitHub Actions doesn't allow to natively re-use variables between jobs.
+
+If you need to **re-use variables defined in a job in other** (subsequent) jobs, then you can use this action.
 
 ### Action's API
 
@@ -50,7 +50,7 @@ Name | Required | Default | Description
 TODO
 ```
 
-## Community examples
+## :hugs: Community examples :heart:
 
 Here are a few community-powered examples, those are usually advanced use-cases!
 
