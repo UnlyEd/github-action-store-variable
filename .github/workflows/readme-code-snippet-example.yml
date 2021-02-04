@@ -40,3 +40,5 @@ jobs:
           variables: MAGIC_NUMBER
       - name: Debug output
         run: echo "We have access to $MAGIC_NUMBER"
+        env:
+          MAGIC_NUMBER: ${{ env.MAGIC_NUMBER }} # Passing imported data MAGIC_NUMBER
