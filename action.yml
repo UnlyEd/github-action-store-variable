@@ -12,7 +12,7 @@ inputs:
     required: false
     default: "\\r?\\n"
   failIfNotFound:
-    description: 'Crash CI in case a variable cannot be find'
+    description: 'Crash CI in case a variable cannot be found'
     required: false
     default: false
 outputs:

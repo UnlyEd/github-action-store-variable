@@ -36,6 +36,7 @@ const defineVariableOperation = (variable: string): VariableStatus => {
             throw Error(`Both key and value are empty`)
         }
     } catch (error) {
+        // Should be throw in case of a wrong format or an unknow operation to proceed
         throw Error(`Type error: ${error}`);
     }
 }
@@ -60,7 +61,7 @@ const storeArtifact = async (variables: VariableDetail[], failIfNotFound: boolea
         const uploadResponses = await Promise.all(artifactsUploadPromises);
         for (const variable of variables) {
             core.exportVariable(variable.key, variable.value);
-            core.debug(`Imported ${variable.key}=${variable.value}`);
+            core.debug(`Imported ${variable.key}=${variable.value} and exported as ENV var`);
         }
     } catch (error) {
         const message: string = `Error while uploading artifact: ${error?.message}`
@@ -83,7 +84,7 @@ const retrieveArtifact = async (variables: VariableDetail[], failIfNotFound: boo
             await client.downloadArtifact(variable.key);
             variable.value = readFileSync(file, {encoding: 'utf8'}).toString();
             core.exportVariable(variable.key, variable.value);
-            core.debug(`Exported ${variable.key}=${variable.value}`);
+            core.debug(`Exported ${variable.key}=${variable.value} as ENV var`);
         } catch (error) {
             const message: string = `Cannot retrieve variable ${variable.key}`
             if (failIfNotFound) {
