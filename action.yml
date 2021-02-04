@@ -10,7 +10,7 @@ inputs:
   delimiter:
     description: 'Regex delimiter between each variable'
     required: false
-    default: "\\r?\\n" # Regex splitting line with a '\n' or '\r'. Notice, we have to escape these characters because they are special and needs to be considered like it.
+    default: "\\r?\\n" # Regex splitting line with a '\n' or '\r'. They also need to be escaped, as they are special chars.
   failIfNotFound:
     description: "If true, will throw an error (and crash CI) when attempting to read a variable that doesn't exist in the store"
     required: false
