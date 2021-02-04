@@ -50,6 +50,12 @@ Name | Required | Default | Description
 TODO
 ```
 
+## Community examples
+
+Here are a few community-powered examples, those are usually advanced use-cases!
+
+- [Next Right Now](https://github.com/UnlyEd/next-right-now/blob/60455642a5c5248c3e0e9604de080e24ef9eed0a/.github/workflows/deploy-vercel-staging.yml#L250-L260)
+
 ---
 
 # Advanced debugging
