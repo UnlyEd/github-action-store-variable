@@ -63,14 +63,11 @@ native [`core.debug` API](https://github.com/actions/toolkit/blob/main/docs/acti
 
 Therefore, it allows you to enable logging whenever you need to debug **what's happening within our action**.
 
-**To enable debug mode**, you have to set a [**GitHub
-Secret**](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets#creating-encrypted-secrets), such
-as:
+**To enable debug mode**, you have to set a [**GitHub Secret**](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets#creating-encrypted-secrets), such as:
 
 - `ACTIONS_STEP_DEBUG` of value `true`
 
-Please see [the official documentation](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#how-to-access-step-debug-logs) for more
-information.
+Please see [the official documentation](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#how-to-access-step-debug-logs) for more information.
 
 > Enabling debugging using `ACTIONS_STEP_DEBUG` will also enable debugging for all other GitHub Actions you use that are using the `core.debug` API.
 
@@ -83,11 +80,13 @@ We gladly accept PRs, but please open an issue first, so we can discuss it befor
 ---
 
 # Changelog
+
 [Changelog](./CHANGELOG.md)
 
 ---
 
 # Releases versioning
+
 We follow Semantic Versioning. (`major.minor.patch`)
 
 Our versioning process is completely automated, any changes landing on the `main` branch will trigger a new [release](../../releases).
@@ -100,6 +99,7 @@ Our versioning process is completely automated, any changes landing on the `main
   - E.g: Documentation, tests, refactoring, bug fix, etc.
 
 ## Releases versions:
+
 - We do not provide major versions that are automatically updated (e.g: `v1`).
 - We only provide tags/releases that are not meant to be changed once released (e.g: `v1.1.0`).
 
@@ -109,6 +109,7 @@ Our versioning process is completely automated, any changes landing on the `main
 ---
 
 # License
+
 [MIT](./LICENSE)
 
 ---
