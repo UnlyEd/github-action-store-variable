@@ -21,7 +21,7 @@ jobs:
           MAGIC_NUMBER=42
           echo "Found universal answer: $MAGIC_NUMBER"
           echo "Exporting it..."
-          echo "MAGIC_NUMBER=$MAGIC_NUMBER >> $GITHUB_ENV"
+          echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
 
       - name: Export variable for next jobs
         uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
@@ -38,7 +38,6 @@ jobs:
         uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           variables: MAGIC_NUMBER
+          failIfNotFound: true
       - name: Debug output
         run: echo "We have access to $MAGIC_NUMBER"
-        env:
-          MAGIC_NUMBER: ${{ env.MAGIC_NUMBER }} # Passing imported data MAGIC_NUMBER
