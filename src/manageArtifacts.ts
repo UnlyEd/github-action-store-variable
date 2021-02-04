@@ -37,7 +37,7 @@ const defineVariableOperation = (variable: string): VariableStatus => {
         }
     } catch (error) {
         // An error will be thrown when the input doesn't have the expected format, or when the operation is unknown
-        throw Error(`Type error: ${error}`);
+        throw Error(`Input type error: ${error}`);
     }
 }
 
