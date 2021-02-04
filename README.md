@@ -84,10 +84,69 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 
 ## Examples
 
-### 1. TODO
+### 1. Save one variable
 
 ```yaml
-TODO
+- name: Export one variable
+  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  with:
+    variables: FOO=BAR
+```
+
+### 2. Save many variables
+
+```yaml
+- name: Export many variables
+  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  with:
+    variables: |
+      FOO=BAR
+      STAGE=production
+```
+
+### 3. Save many variables using a custom delimiter
+```yaml
+- name: Export many variables
+  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  with:
+    delimiter: ':'
+    variables: FOO=BAR:STAGE=production
+```
+
+### 4. Retrieve one variable
+```yaml
+- name: Import variable MAGIC_NUMBER
+  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  with:
+    variables: FOO
+```
+
+### 5. Retrieve many variables
+```yaml
+- name: Import variable MAGIC_NUMBER
+  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  with:
+    variables: |
+      FOO
+      STAGE
+```
+
+### 6. Retrieve many variables using a custom delimiter
+```yaml
+- name: Import variable MAGIC_NUMBER
+  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  with:
+    delimiter: ';'
+    variables: FOO;STAGE
+```
+
+### 7. Crash CI if variable doesn't exist
+```yaml
+- name: Import variable MAGIC_NUMBER
+  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  with:
+    failIfNotFound: true
+    variables: WRONG_VARIABLE
 ```
 
 ## :hugs: Community examples :heart:
