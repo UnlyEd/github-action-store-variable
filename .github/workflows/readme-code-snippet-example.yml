@@ -32,6 +32,7 @@ jobs:
   retrieve-data:
     name: Find & re-use data
     runs-on: ubuntu-18.04
+    needs: compute-data
     steps:
       - name: Import variable MAGIC_NUMBER
         uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
