@@ -10,7 +10,7 @@ inputs:
   delimiter:
     description: 'Regex defining the delimiter'
     required: false
-    default: "\r?\n"
+    default: "\\r?\\n"
 outputs:
   variablesObject:
     description: 'Object containing values keys and values'
