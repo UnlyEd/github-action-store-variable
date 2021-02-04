@@ -36,7 +36,7 @@ const defineVariableOperation = (variable: string): VariableStatus => {
             throw Error(`Both key and value are empty`)
         }
     } catch (error) {
-        // Should be throw in case of a wrong format or an unknow operation to proceed
+        // An error will be thrown when the input doesn't have the expected format, or when the operation is unknown
         throw Error(`Type error: ${error}`);
     }
 }
@@ -61,7 +61,7 @@ const storeArtifact = async (variables: VariableDetail[], failIfNotFound: boolea
         const uploadResponses = await Promise.all(artifactsUploadPromises);
         for (const variable of variables) {
             core.exportVariable(variable.key, variable.value);
-            core.debug(`Imported ${variable.key}=${variable.value} and exported as ENV var`);
+            core.debug(`Imported ${variable.key}=${variable.value} and exported it back as ENV var`);
         }
     } catch (error) {
         const message: string = `Error while uploading artifact: ${error?.message}`

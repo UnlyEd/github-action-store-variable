@@ -8,11 +8,11 @@ inputs:
     description: 'Store: VAR=VALUE,OTHER_VAR=VALUE | Retrieve: VAR,OTHER_VALUE'
     required: true
   delimiter:
-    description: 'Regex defining the delimiter'
+    description: 'Regex delimiter between each variable'
     required: false
-    default: "\\r?\\n"
+    default: "\\r?\\n" # Regex splitting line with a '\n' or '\r'. Notice, we have to escape these characters because they are special and needs to be considered like it.
   failIfNotFound:
-    description: 'Crash CI in case a variable cannot be found'
+    description: "If true, will throw an error (and crash CI) when attempting to read a variable that doesn't exist in the store"
     required: false
     default: false
 outputs:
