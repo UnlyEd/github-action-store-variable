@@ -60,7 +60,7 @@ describe('Functional test', () => {
             global.console = global.unmuteConsole();
         });
 
-        describe('using default delimiter', () => {
+        describe('using special delimiter', () => {
             const options: cp.ExecFileSyncOptions = {
                 env: {
                     'INPUT_VARIABLES': "VAR=TEST,OTHER_VAR=OTHER_TEST,RETRIEVE",
@@ -69,6 +69,7 @@ describe('Functional test', () => {
             };
             const filteredContent = exec_lib(options);
             test("test", () => {
+                expect(filteredContent.includes(",")).toBe(true);
                 console.log(filteredContent)
             });
         });
