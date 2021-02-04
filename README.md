@@ -11,10 +11,47 @@
 ## Code snippet example (minimal example)
 
 ```yaml
-TODO
-```
+name: 'GitHub Action code snippet'
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'releases/*'
+jobs:
+  compute-data:
+    name: Compute data
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Compute ressource
+        run: |
+          MAGIC_NUMBER=42
+          echo "Found universal answer: $MAGIC_NUMBER"
+          echo "Exporting it..."
+          echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
 
-_See the [Examples section](#examples) for more advanced examples._
+      - name: Export variable for next jobs
+        uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+        with:
+          variables: |
+            MAGIC_NUMBER=${{ env.MAGIC_NUMBER }}
+
+  retrieve-data:
+    name: Find & re-use data
+    runs-on: ubuntu-18.04
+    needs: compute-data
+    steps:
+      - name: Import variable MAGIC_NUMBER
+        uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+        with:
+          variables: MAGIC_NUMBER
+          failIfNotFound: true
+      - name: Debug output
+        run: echo "We have access to $MAGIC_NUMBER"
+```
+See the output of this code [here](https://github.com/UnlyEd/github-action-store-variable/actions?query=workflow%3A%22GitHub+Action+code+snippet%22).
+
+See the [Examples section](#examples) for more advanced examples.
 
 ## What does this GitHub Action do?
 
