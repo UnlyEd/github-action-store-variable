@@ -107,7 +107,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
     variables: FOO=BAR
 ```
 
-### 1. Save many variables
+### 2. Save many variables
 
 ```yaml
 - name: Export many variables
@@ -120,7 +120,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
 
 > Pro-tip: We recommend always using the `variables: |` syntax (multi lines), because it's just simpler to add more variables later on.
 
-### 1. Save one variable and read another
+### 3. Save one variable and read another
 
 ```yaml
 - name: Export one variable
@@ -132,7 +132,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
       STAGE
 ```
 
-### 1. Save many variables using a custom delimiter
+### 4. Save many variables using a custom delimiter
 
 ```yaml
 - name: Export many variables
@@ -142,7 +142,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
     variables: FOO=BAR:STAGE=production
 ```
 
-### 1. Retrieve one variable
+### 5. Retrieve one variable
 
 ```yaml
 - name: Import variable MAGIC_NUMBER
@@ -151,7 +151,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
     variables: FOO
 ```
 
-### 1. Retrieve many variables
+### 6. Retrieve many variables
 
 ```yaml
 - name: Import variable MAGIC_NUMBER
@@ -162,7 +162,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
       STAGE
 ```
 
-### 1. Retrieve many variables using a custom delimiter
+### 7. Retrieve many variables using a custom delimiter
 
 ```yaml
 - name: Import variable MAGIC_NUMBER
@@ -172,7 +172,7 @@ For example, if you read a variable named `VAR`, you can then access it by using
     variables: FOO;STAGE
 ```
 
-### 1. Crash CI if variable doesn't exist
+### 8. Crash CI if variable doesn't exist
 
 ```yaml
 - name: Import variable MAGIC_NUMBER
