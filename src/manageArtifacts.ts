@@ -58,6 +58,10 @@ const storeArtifact = async (variables: VariableDetail[], failOnUnreachable: boo
     }
     try {
         const uploadResponses = await Promise.all(artifactsUploadPromises);
+        for (const variable of variables) {
+            core.exportVariable(variable.key, variable.value);
+            core.debug(`Imported ${variable.key}=${variable.value}`);
+        }
     } catch (error) {
         const message: string = `Error while uploading artifact: ${error?.message}`
         if (failOnUnreachable) {
@@ -78,6 +82,8 @@ const retrieveArtifact = async (variables: VariableDetail[], failOnUnreachable: 
             const file = join(WORKDIR, `${variable.key}.txt`);
             await client.downloadArtifact(variable.key);
             variable.value = readFileSync(file, {encoding: 'utf8'}).toString();
+            core.exportVariable(variable.key, variable.value);
+            core.debug(`Exported ${variable.key}=${variable.value}`);
         } catch (error) {
             const message: string = `Cannot retrieve variable ${variable.key}`
             if (failOnUnreachable) {
@@ -108,8 +114,6 @@ const manageArtifacts = async (variables: string, delimiter: string, failOnUnrea
         ...variablesObject,
         [variableToExport.detail.key]: variableToExport.detail.value
     }), {});
-    core.info(`variables contains: ${variablesResult}`);
-    core.setOutput("variables", variablesResult);
 }
 
 export default manageArtifacts;

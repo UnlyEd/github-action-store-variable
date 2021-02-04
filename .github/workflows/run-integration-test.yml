@@ -26,14 +26,13 @@ jobs:
       - run: |
           echo "Exported variable URL=$URL"
         env:
-          URL: ${{ fromJson(steps.store-variables.outputs.variables).URL }}
+          URL: ${{ env.URL }}
   second-test:
     runs-on: ubuntu-18.04
     needs: run-integration-test
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-        id: store-variables
         with:
           variables: |
             URL
@@ -42,15 +41,14 @@ jobs:
           echo "Found from previous job URL=$URL"
           echo "Exported variable SECOND_URL=$SECOND_URL"
         env:
-          URL: ${{ fromJson(steps.store-variables.outputs.variables).URL }}
-          SECOND_URL: ${{ fromJson(steps.store-variables.outputs.variables).SECOND_URL }}
+          URL: ${{ env.URL }}
+          SECOND_URL: ${{ env.SECOND_URL }}
   third-test:
     runs-on: ubuntu-18.04
     needs: second-test
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-        id: store-variables
         with:
           variables: |
             URL
@@ -59,8 +57,8 @@ jobs:
           echo "Found from previous job URL=$URL"
           echo "Found from previous job SECOND_URL=$SECOND_URL"
         env:
-          URL: ${{ fromJson(steps.store-variables.outputs.variables).URL }}
-          SECOND_URL: ${{ fromJson(steps.store-variables.outputs.variables).SECOND_URL }}
+          URL: ${{ env.URL }}
+          SECOND_URL: ${{ env.SECOND_URL }}
 
   should-not-fail-on-retrieving:
     runs-on: ubuntu-18.04
