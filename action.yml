@@ -15,9 +15,6 @@ inputs:
     description: "If true, will throw an error (and crash CI) when attempting to read a variable that doesn't exist in the store"
     required: false
     default: false
-outputs:
-  variablesObject:
-    description: 'Object containing values keys and values'
 runs:
   using: 'node12'
   main: 'lib/main.js'

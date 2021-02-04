@@ -36,10 +36,13 @@ If you need to **re-use variables defined in a job in other** (subsequent) jobs,
 
 Name | Required | Default | Description
 ---  | --- |--- |---
-``|✅| |
-``|✖️|``|
+`variables`|✅| | Store: VAR=VALUE or Retrieve: VAR
+`delimiter`|✖️|`\r?\n`| Regex delimiter between each variable
+`failIfNotFound`|✖️|`false`| If true, will throw an error (and crash CI) when attempting to read a variable that doesn't exist in the store
 
 #### Outputs
+There are no outputs by this action, it **automatically** these variables in `${{ env }}`.
+For example, if you are asking for a variable `VAR`, you cann access to by using `${{ env.VAR }}`.
 
 
 ## Examples
