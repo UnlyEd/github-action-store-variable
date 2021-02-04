@@ -13,43 +13,49 @@
 ```yaml
 name: 'GitHub Action code snippet'
 on:
-  pull_request:
   push:
     branches:
-      - main
-      - 'releases/*'
+      - '*'
 jobs:
+  # On some job, do some stuff an persist variables meant to be re-used in other jobs
   compute-data:
     name: Compute data
     runs-on: ubuntu-18.04
     steps:
+      # Do your own internal business logic...
       - name: Compute ressource
         run: |
           MAGIC_NUMBER=42
           echo "Found universal answer: $MAGIC_NUMBER"
-          echo "Exporting it..."
+          echo "Exporting it as ENV variable..."
           echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
 
+      # XXX We recommend to export all your variables at once, at the end of your job
       - name: Export variable for next jobs
-        uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+        uses: UnlyEd/github-action-store-variable@v2.1.0 # See https://github.com/UnlyEd/github-action-store-variable
         with:
+          # Persist (store) our MAGIC_NUMBER ENV variable into our store, for the next jobs
           variables: |
             MAGIC_NUMBER=${{ env.MAGIC_NUMBER }}
 
+  # In another job, read the previously stored variable and use it
   retrieve-data:
     name: Find & re-use data
     runs-on: ubuntu-18.04
     needs: compute-data
     steps:
       - name: Import variable MAGIC_NUMBER
-        uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+        uses: UnlyEd/github-action-store-variable@v2.1.0 # See https://github.com/UnlyEd/github-action-store-variable
         with:
-          variables: MAGIC_NUMBER
-          failIfNotFound: true
+          # List all variables you want to retrieve from the store
+          # XXX They'll be automatically added to your ENV
+          variables: | 
+            MAGIC_NUMBER
       - name: Debug output
         run: echo "We have access to $MAGIC_NUMBER"
 ```
-See the output of this code [here](https://github.com/UnlyEd/github-action-store-variable/actions?query=workflow%3A%22GitHub+Action+code+snippet%22).
+
+> If you want to see a real output, check out the output of our code snippet example [here](https://github.com/UnlyEd/github-action-store-variable/actions/runs/537556204).
 
 See the [Examples section](#examples) for more advanced examples.
 
@@ -60,6 +66,13 @@ You can use this action to **store variables** in a sort of "global store" for y
 Then, you can **read the variables** that have been stored previously.
 
 The variables stored can be read by any job within the same workflow.
+
+> **N.B**: When you read a variable, **it is automatically added as an ENV variable** and will erase any variable with the same name.
+> 
+> This behavior helps keeping the code cleaner by only manipulating (reading/writing) ENV variables.
+> In v1, we had to read the variables from a JSON object, and [it was ugly](https://github.com/UnlyEd/github-action-store-variable/blob/c4143c0d7f/.github/workflows/run-integration-test.yml#L29).
+
+> N.B: You can both **read and write** in the same action.
 
 ## Why/when should you use it?
 
@@ -73,14 +86,15 @@ If you need to **re-use variables defined in a job in other** (subsequent) jobs,
 
 Name | Required | Default | Description
 ---  | --- |--- |---
-`variables`|✅| | Store: VAR=VALUE or Retrieve: VAR
-`delimiter`|✖️|`\r?\n`| Regex delimiter between each variable
+`variables`|✅| | Write variable: `VAR=VALUE` - Read variable: `VAR`
+`delimiter`|✖️|`\r?\n`| Regex delimiter between each variable, defaults to normal line break
 `failIfNotFound`|✖️|`false`| If true, will throw an error (and crash CI) when attempting to read a variable that doesn't exist in the store
 
 #### Outputs
-There are no outputs by this action, it **automatically** these variables in `${{ env }}`.
-For example, if you are asking for a variable `VAR`, you cann access to by using `${{ env.VAR }}`.
 
+There are no outputs for this action, reading variables **automatically** adds these variables in `${{ env }}`.
+
+For example, if you read a variable named `VAR`, you can then access it by using `${{ env.VAR }}`.
 
 ## Examples
 
@@ -88,7 +102,7 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 
 ```yaml
 - name: Export one variable
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     variables: FOO=BAR
 ```
@@ -97,63 +111,84 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 
 ```yaml
 - name: Export many variables
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     variables: |
       FOO=BAR
       STAGE=production
 ```
 
-### 3. Save many variables using a custom delimiter
+> Pro-tip: We recommend always using the `variables: |` syntax (multi lines), because it's just simpler to add more variables later on.
+
+### 3. Save one variable and read another
+
+```yaml
+- name: Export one variable
+  uses: UnlyEd/github-action-store-variable@v2.1.0
+  with:
+    # Writes "FOO" and reads "STAGE"
+    variables: |
+      FOO=BAR
+      STAGE
+```
+
+### 4. Save many variables using a custom delimiter
+
 ```yaml
 - name: Export many variables
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     delimiter: ':'
     variables: FOO=BAR:STAGE=production
 ```
 
-### 4. Retrieve one variable
+### 5. Retrieve one variable
+
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     variables: FOO
 ```
 
-### 5. Retrieve many variables
+### 6. Retrieve many variables
+
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     variables: |
       FOO
       STAGE
 ```
 
-### 6. Retrieve many variables using a custom delimiter
+### 7. Retrieve many variables using a custom delimiter
+
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     delimiter: ';'
     variables: FOO;STAGE
 ```
 
-### 7. Crash CI if variable doesn't exist
+### 8. Crash CI if variable doesn't exist
+
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0
+  uses: UnlyEd/github-action-store-variable@v2.1.0
   with:
     failIfNotFound: true
     variables: WRONG_VARIABLE
 ```
 
+> N.B: If you want to crash only for some variables, then you can call 2 times the `UnlyEd/github-action-store-variable` and have `failIfNotFound: true` in one of them.
+
 ## :hugs: Community examples :heart:
 
 Here are a few community-powered examples, those are usually advanced use-cases!
 
-- [Next Right Now](https://github.com/UnlyEd/next-right-now/blob/60455642a5c5248c3e0e9604de080e24ef9eed0a/.github/workflows/deploy-vercel-staging.yml#L250-L260)
+- [Next Right Now](https://github.com/UnlyEd/next-right-now/blob/60455642a5c5248c3e0e9604de080e24ef9eed0a/.github/workflows/deploy-vercel-staging.yml#L250-L260) _(Disclosure: We're the author!)_
 
 ---
 
