@@ -1,4 +1,10 @@
 <a href="https://unly.org"><img src="https://storage.googleapis.com/unly/images/ICON_UNLY.png" align="right" height="20" alt="Unly logo" title="Unly logo" /></a>
+[![Maintainability](https://api.codeclimate.com/v1/badges/9e073b5db2eec4c4e5c8/maintainability)](https://codeclimate.com/github/UnlyEd/github-action-store-variable/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/9e073b5db2eec4c4e5c8/test_coverage)](https://codeclimate.com/github/UnlyEd/github-action-store-variable/test_coverage)
+
+![GitHub Action integration test](https://github.com/UnlyEd/github-action-store-variable/workflows/GitHub%20Action%20integration%20test/badge.svg)
+![GitHub Action build test](https://github.com/UnlyEd/github-action-store-variable/workflows/GitHub%20Action%20build%20test/badge.svg)
+![Update Code Climate test coverage](https://github.com/UnlyEd/github-action-store-variable/workflows/Update%20Code%20Climate%20test%20coverage/badge.svg)
 
 # GitHub Action - Store variables between your jobs
 
@@ -11,7 +17,7 @@
 # Releases versioning
 We follow Semantic Versioning. (`major.minor.patch`)
 
-Our versioning process is completely automated, any changes landing on the `main` branch will trigger a new [release](https://github.com/UnlyEd/github-action-await-vercel/releases).
+Our versioning process is completely automated, any changes landing on the `main` branch will trigger a new [release](/releases).
 
 - `MAJOR`: Behavioral change of the existing API that would result in a breaking change.
   - E.g: Removing an input, or changing the output would result in a breaking change and thus would be released as a new MAJOR version.
@@ -24,7 +30,7 @@ Our versioning process is completely automated, any changes landing on the `main
 - We do not provide major versions that are automatically updated (e.g: `v1`).
 - We only provide tags/releases that are not meant to be changed once released (e.g: `v1.1.0`).
 
-> As utility, we provide a special [`latest`](https://github.com/UnlyEd/github-action-await-vercel/releases/tag/latest) tag which is automatically updated to the latest release.
+> As utility, we provide a special [`latest`](/releases/tag/latest) tag which is automatically updated to the latest release.
 > _This tag/release is **not meant to be used in production systems**, as it is not reliable (might jump to the newest MAJOR version at any time)._
 
 ---
