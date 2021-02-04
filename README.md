@@ -8,6 +8,79 @@
 
 # GitHub Action - Store variables between your jobs
 
+## Code snippet example (minimal example)
+
+```yaml
+TODO
+```
+
+_See the [Examples section](#examples) for more advanced examples._
+
+## What does this GitHub Action do?
+
+You can use this action to **store variables** in a sort of "global store" for your GitHub Actions.
+
+Then, you can **read the variables** that have been stored previously.
+
+The variables stored can be read by any job within the same workflow.
+
+## Why/when should you use it?
+
+If you need to **re-use variables defined in a job in other** (subsequent) jobs, then you can use this action.
+
+GitHub Actions doesn't allow to natively re-use variables between jobs.
+
+### Action's API
+
+#### Inputs
+
+Name | Required | Default | Description
+---  | --- |--- |---
+``|✅| |
+``|✖️|``|
+
+#### Outputs
+
+
+## Examples
+
+### 1. TODO
+
+```yaml
+TODO
+```
+
+---
+
+# Advanced debugging
+
+> Learn how to enable logging, from within the `github-action-store-variable` action.
+
+## How to enable debug logs
+
+Our GitHub Action is written using the GitHub Actions
+native [`core.debug` API](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#step-debug-logs).
+
+Therefore, it allows you to enable logging whenever you need to debug **what's happening within our action**.
+
+**To enable debug mode**, you have to set a [**GitHub
+Secret**](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets#creating-encrypted-secrets), such
+as:
+
+- `ACTIONS_STEP_DEBUG` of value `true`
+
+Please see [the official documentation](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#how-to-access-step-debug-logs) for more
+information.
+
+> Enabling debugging using `ACTIONS_STEP_DEBUG` will also enable debugging for all other GitHub Actions you use that are using the `core.debug` API.
+
+---
+
+# Contributing
+
+We gladly accept PRs, but please open an issue first, so we can discuss it beforehand.
+
+---
 
 # Changelog
 [Changelog](./CHANGELOG.md)
