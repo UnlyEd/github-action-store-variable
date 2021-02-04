@@ -8,9 +8,9 @@ inputs:
     description: 'Store: VAR=VALUE,OTHER_VAR=VALUE | Retrieve: VAR,OTHER_VALUE'
     required: true
   delimiter:
-    description: 'Parsing split character'
+    description: 'Regex defining the delimiter'
     required: false
-    default: "\n"
+    default: "\r?\n"
 outputs:
   variablesObject:
     description: 'Object containing values keys and values'

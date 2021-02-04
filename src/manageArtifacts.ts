@@ -36,7 +36,7 @@ const defineVariableOperation = (variable: string): VariableStatus => {
             throw Error(`Both key and value are empty`)
         }
     } catch (error) {
-        throw Error('Error type')
+        throw Error(`Type error: ${error}`);
     }
 }
 
@@ -80,24 +80,22 @@ const retrieveArtifact = async (variables: VariableDetail[]): Promise<void> => {
 const manageArtifacts = async (variables: string, delimiter: string): Promise<void> => {
     const variablesDetail: VariableStatus[] = [];
 
-    for (const variable of variables.split(/\r?\n/)) {
-        console.log("Debugging received line: ", variable);
+    for (const variable of variables.split(new RegExp(delimiter))) {
         try {
             variablesDetail.push(defineVariableOperation(variable));
         } catch (error) {
             console.log(error)
         }
     }
-    console.log("Before:")
-    console.log(variablesDetail)
     await storeArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 0)
         .map((variable: VariableStatus) => variable.detail));
     await retrieveArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 1)
         .map((variable: VariableStatus) => variable.detail));
-    console.log("After:")
-    console.log(variablesDetail)
 
-    const variablesResult = variablesDetail.reduce((variablesObject, variableToExport) => ({...variablesObject, [variableToExport.detail.key]: variableToExport.detail.value}), {});
+    const variablesResult = variablesDetail.reduce((variablesObject, variableToExport) => ({
+        ...variablesObject,
+        [variableToExport.detail.key]: variableToExport.detail.value
+    }), {});
     core.info(`variables contains: ${variablesResult}`);
     core.setOutput("variables", variablesResult);
 }
