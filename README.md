@@ -22,7 +22,7 @@ jobs:
     name: Compute data
     runs-on: ubuntu-18.04
     steps:
-      # Do you own internal business logic...
+      # Do your own internal business logic...
       - name: Compute ressource
         run: |
           MAGIC_NUMBER=42
