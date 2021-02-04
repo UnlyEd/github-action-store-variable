@@ -88,7 +88,7 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 
 ```yaml
 - name: Export one variable
-  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  uses: UnlyEd/github-action-store-variable@v2.0.0
   with:
     variables: FOO=BAR
 ```
@@ -97,7 +97,7 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 
 ```yaml
 - name: Export many variables
-  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  uses: UnlyEd/github-action-store-variable@v2.0.0
   with:
     variables: |
       FOO=BAR
@@ -107,7 +107,7 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 ### 3. Save many variables using a custom delimiter
 ```yaml
 - name: Export many variables
-  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  uses: UnlyEd/github-action-store-variable@v2.0.0
   with:
     delimiter: ':'
     variables: FOO=BAR:STAGE=production
@@ -116,7 +116,7 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 ### 4. Retrieve one variable
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  uses: UnlyEd/github-action-store-variable@v2.0.0
   with:
     variables: FOO
 ```
@@ -124,7 +124,7 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 ### 5. Retrieve many variables
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  uses: UnlyEd/github-action-store-variable@v2.0.0
   with:
     variables: |
       FOO
@@ -134,7 +134,7 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 ### 6. Retrieve many variables using a custom delimiter
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  uses: UnlyEd/github-action-store-variable@v2.0.0
   with:
     delimiter: ';'
     variables: FOO;STAGE
@@ -143,7 +143,7 @@ For example, if you are asking for a variable `VAR`, you cann access to by using
 ### 7. Crash CI if variable doesn't exist
 ```yaml
 - name: Import variable MAGIC_NUMBER
-  uses: UnlyEd/github-action-store-variable@v2.0.0 # See https://github.com/UnlyEd/github-action-store-variable
+  uses: UnlyEd/github-action-store-variable@v2.0.0
   with:
     failIfNotFound: true
     variables: WRONG_VARIABLE
