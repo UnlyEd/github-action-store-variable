@@ -36,11 +36,12 @@ const defineVariableOperation = (variable: string): VariableStatus => {
             throw Error(`Both key and value are empty`)
         }
     } catch (error) {
-        throw Error('Error type')
+        // An error will be thrown when the input doesn't have the expected format, or when the operation is unknown
+        throw Error(`Input type error: ${error}`);
     }
 }
 
-const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
+const storeArtifact = async (variables: VariableDetail[], failIfNotFound: boolean): Promise<void> => {
     const client: ArtifactClient = artifact.create();
     const artifactOptions: UploadOptions = {
         retentionDays: 1 // Only keep artifacts 1 day to avoid reach limit: https://github.com/actions/toolkit/blob/c861dd8859fe5294289fcada363ce9bc71e9d260/packages/artifact/src/internal/upload-options.ts#L1
@@ -56,11 +57,23 @@ const storeArtifact = async (variables: VariableDetail[]): Promise<void> => {
         writeFileSync(file, variable.value, {encoding: 'utf8'});
         artifactsUploadPromises.push(client.uploadArtifact(variable.key, [file], process.cwd(), artifactOptions));
     }
-    const uploadResponses = await Promise.all(artifactsUploadPromises);
-    console.log(uploadResponses);
+    try {
+        const uploadResponses = await Promise.all(artifactsUploadPromises);
+        for (const variable of variables) {
+            core.exportVariable(variable.key, variable.value);
+            core.debug(`Imported ${variable.key}=${variable.value} and exported it back as ENV var`);
+        }
+    } catch (error) {
+        const message: string = `Error while uploading artifact: ${error?.message}`
+        if (failIfNotFound) {
+            core.setFailed(message);
+        } else {
+            core.warning(message);
+        }
+    }
 }
 
-const retrieveArtifact = async (variables: VariableDetail[]): Promise<void> => {
+const retrieveArtifact = async (variables: VariableDetail[], failIfNotFound: boolean): Promise<void> => {
     const client: ArtifactClient = artifact.create();
 
     rimraf.sync(WORKDIR);
@@ -70,36 +83,38 @@ const retrieveArtifact = async (variables: VariableDetail[]): Promise<void> => {
             const file = join(WORKDIR, `${variable.key}.txt`);
             await client.downloadArtifact(variable.key);
             variable.value = readFileSync(file, {encoding: 'utf8'}).toString();
+            core.exportVariable(variable.key, variable.value);
+            core.debug(`Exported ${variable.key}=${variable.value} as ENV var`);
         } catch (error) {
-            core.warning(`Cannot retrieve variable ${variable.key}`)
-            console.error(error);
+            const message: string = `Cannot retrieve variable ${variable.key}`
+            if (failIfNotFound) {
+                core.setFailed(message);
+            } else {
+                core.warning(message);
+            }
         }
     }
 }
 
-const manageArtifacts = async (variables: string, delimiter: string): Promise<void> => {
+const manageArtifacts = async (variables: string, delimiter: string, failIfNotFound: boolean): Promise<void> => {
     const variablesDetail: VariableStatus[] = [];
 
-    for (const variable of variables.split(/\r?\n/)) {
-        console.log("Debugging received line: ", variable);
+    for (const variable of variables.split(new RegExp(delimiter))) {
         try {
             variablesDetail.push(defineVariableOperation(variable));
         } catch (error) {
             console.log(error)
         }
     }
-    console.log("Before:")
-    console.log(variablesDetail)
     await storeArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 0)
-        .map((variable: VariableStatus) => variable.detail));
+        .map((variable: VariableStatus) => variable.detail), failIfNotFound);
     await retrieveArtifact(variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 1)
-        .map((variable: VariableStatus) => variable.detail));
-    console.log("After:")
-    console.log(variablesDetail)
+        .map((variable: VariableStatus) => variable.detail), failIfNotFound);
 
-    const variablesResult = variablesDetail.reduce((variablesObject, variableToExport) => ({...variablesObject, [variableToExport.detail.key]: variableToExport.detail.value}), {});
-    core.info(`variables contains: ${variablesResult}`);
-    core.setOutput("variables", variablesResult);
+    const variablesResult = variablesDetail.reduce((variablesObject, variableToExport) => ({
+        ...variablesObject,
+        [variableToExport.detail.key]: variableToExport.detail.value
+    }), {});
 }
 
 export default manageArtifacts;
