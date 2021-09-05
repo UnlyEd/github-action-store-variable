@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+      - run: yarn # Install all dependencies
       - uses: ./
         id: store-variables
         with:
@@ -32,6 +33,7 @@ jobs:
     needs: run-integration-test
     steps:
       - uses: actions/checkout@v2
+      - run: yarn # Install all dependencies
       - uses: ./
         with:
           variables: |
@@ -48,6 +50,7 @@ jobs:
     needs: second-test
     steps:
       - uses: actions/checkout@v2
+      - run: yarn # Install all dependencies
       - uses: ./
         with:
           variables: |
@@ -64,6 +67,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+      - run: yarn # Install all dependencies
       - uses: ./
         with:
           variables: |
