@@ -127,3 +127,6 @@ yarn-error.log*
 
 # Tmp files (cache, etc.)
 *.cache
+
+# NPM modules
+node_modules/
