@@ -231,10 +231,10 @@ We follow Semantic Versioning. (`major.minor.patch`)
 
 Our versioning process is completely automated, any changes landing on the `main` branch will trigger a new [release](../../releases).
 
-- `MAJOR`: Behavioral change of the existing API that would result in a breaking change.
+- `(MAJOR)`: Behavioral change of the existing API that would result in a breaking change.
   - E.g: Removing an input, or changing the output would result in a breaking change and thus would be released as a new MAJOR version.
-- `Minor`: Behavioral change of the existing API that would **not** result in a breaking change.
-  - E.g: Adding an optional input would result in a non-breaking change and thus would be released as a new Minor version.
+- `(MINOR)`: Behavioral change of the existing API that would **not** result in a breaking change.
+  - E.g: Adding an optional input would result in a non-breaking change and thus would be released as a new MINOR version.
 - `Patch`: Any other change.
   - E.g: Documentation, tests, refactoring, bug fix, etc.
 
