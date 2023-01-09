@@ -11,6 +11,7 @@ jobs:
   # We want to wait for the auto-git-release-x to be done, so that we always test the MAJOR version that was just updated
   await-release:
     name: Sleep for 45 seconds
+    runs-on: ubuntu-22.04
     steps:
       - run: sleep 45s
         shell: bash
