@@ -57,6 +57,7 @@ jobs:
   save-many-variables-by-using-custom-delimiter:
     name: Save many variables by using a custom delimiter (comma)
     runs-on: ubuntu-22.04
+    needs: await-release
     steps:
       - name: Export variable for next jobs
         uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
