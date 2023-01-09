@@ -14,16 +14,21 @@
 name: 'GitHub Action code snippet'
 on:
   push:
-    branches:
-      - '*'
+
 jobs:
-  # On some job, do some stuff an persist variables meant to be re-used in other jobs
+  # We want to wait for the 
+  await-release:
+    name: Sleep for 30 seconds
+    run: sleep 30s
+    shell: bash
+    
+  # On some job, do some stuff and persist variables meant to be re-used in other jobs
   compute-data:
     name: Compute data
     runs-on: ubuntu-22.04
     steps:
       # Do your own internal business logic...
-      - name: Compute ressource
+      - name: Compute resources
         run: |
           MAGIC_NUMBER=42
           echo "Found universal answer: $MAGIC_NUMBER"
@@ -31,8 +36,8 @@ jobs:
           echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
 
       # XXX We recommend to export all your variables at once, at the end of your job
-      - name: Export variable for next jobs
-        uses: UnlyEd/github-action-store-variable@v2.1.0 # See https://github.com/UnlyEd/github-action-store-variable
+      - name: Export variable MAGIC_NUMBER for next jobs
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           # Persist (store) our MAGIC_NUMBER ENV variable into our store, for the next jobs
           variables: |
@@ -45,14 +50,38 @@ jobs:
     needs: compute-data
     steps:
       - name: Import variable MAGIC_NUMBER
-        uses: UnlyEd/github-action-store-variable@v2.1.0 # See https://github.com/UnlyEd/github-action-store-variable
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           # List all variables you want to retrieve from the store
           # XXX They'll be automatically added to your ENV
-          variables: | 
+          variables: |
             MAGIC_NUMBER
       - name: Debug output
         run: echo "We have access to $MAGIC_NUMBER"
+
+  save-many-variables-by-using-custom-delimiter:
+    name: Save many variables by using a custom delimiter (comma)
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Export variable for next jobs
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
+        with:
+          delimiter: ','
+          variables: FOO=BAR,STAGE=production
+
+  retrieve-data-saved-with-a-custom-delimiter:
+    name: Retrieve variables using a custom delimiter
+    runs-on: ubuntu-22.04
+    needs: save-many-variables-by-using-custom-delimiter
+    steps:
+      - name: Import variable MAGIC_NUMBER
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
+        with:
+          delimiter: ';'
+          variables: FOO;STAGE
+          failIfNotFound: true
+      - name: Debug output
+        run: echo "Found FOO=$FOO and STAGE=$STAGE"
 ```
 
 > If you want to see a real output, check out the output of our code snippet example [here](https://github.com/UnlyEd/github-action-store-variable/actions/runs/537556204).

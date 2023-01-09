@@ -2,21 +2,20 @@
 # Test actual example used in README.md
 # Makes sure the GitHub Action builds when being built by GitHub Actions.
 #
-# See https://github.com/actions/checkout https://github.com/actions/checkout/releases/tag/v2
+# See https://github.com/actions/checkout https://github.com/actions/checkout/releases/tag/v3
 
 name: 'GitHub Action code snippet'
 on:
   push:
-    branches:
-      - '*'
+
 jobs:
-  # On some job, do some stuff an persist variables meant to be re-used in other jobs
+  # On some job, do some stuff and persist variables meant to be re-used in other jobs
   compute-data:
     name: Compute data
     runs-on: ubuntu-22.04
     steps:
       # Do your own internal business logic...
-      - name: Compute ressource
+      - name: Compute resources
         run: |
           MAGIC_NUMBER=42
           echo "Found universal answer: $MAGIC_NUMBER"
@@ -24,7 +23,7 @@ jobs:
           echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
 
       # XXX We recommend to export all your variables at once, at the end of your job
-      - name: Export variable for next jobs
+      - name: Export variable MAGIC_NUMBER for next jobs
         uses: UnlyEd/github-action-store-variable@v2.1.1 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           # Persist (store) our MAGIC_NUMBER ENV variable into our store, for the next jobs
@@ -48,7 +47,7 @@ jobs:
         run: echo "We have access to $MAGIC_NUMBER"
 
   save-many-variables-by-using-custom-delimiter:
-    name: Save many variable by using a custom delimiter (comma)
+    name: Save many variables by using a custom delimiter (comma)
     runs-on: ubuntu-22.04
     steps:
       - name: Export variable for next jobs
@@ -58,7 +57,7 @@ jobs:
           variables: FOO=BAR,STAGE=production
 
   retrieve-data-saved-with-a-custom-delimiter:
-    name: Retrieve data saved with a custom delimiter
+    name: Retrieve variables using a custom delimiter
     runs-on: ubuntu-22.04
     needs: save-many-variables-by-using-custom-delimiter
     steps:
