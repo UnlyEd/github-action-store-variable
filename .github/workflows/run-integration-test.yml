@@ -60,7 +60,7 @@ jobs:
           URL: ${{ env.URL }}
           SECOND_URL: ${{ env.SECOND_URL }}
 
-  should-not-fail-on-retrieving:
+  should-not-fail-on-retrieving-UNKNOWN_VAR:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -68,5 +68,5 @@ jobs:
       - uses: ./
         with:
           variables: |
-            RANDOM_VAR
-          failIfNotFound: false # default is false
+            UNKNOWN_VAR
+          failIfNotFound: false # Default is false
