@@ -14,10 +14,10 @@ on:
       - 'releases/*'
 
 jobs:
-  run-integration-test:
-    runs-on: ubuntu-18.04
+  run-integration-test1:
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: yarn # Install all dependencies
       - uses: ./
         id: store-variables
@@ -28,11 +28,11 @@ jobs:
           echo "Exported variable URL=$URL"
         env:
           URL: ${{ env.URL }}
-  second-test:
-    runs-on: ubuntu-18.04
-    needs: run-integration-test
+  run-integration-test2:
+    runs-on: ubuntu-22.04
+    needs: run-integration-test1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: yarn # Install all dependencies
       - uses: ./
         with:
@@ -45,11 +45,11 @@ jobs:
         env:
           URL: ${{ env.URL }}
           SECOND_URL: ${{ env.SECOND_URL }}
-  third-test:
-    runs-on: ubuntu-18.04
-    needs: second-test
+  run-integration-test3:
+    runs-on: ubuntu-22.04
+    needs: run-integration-test2
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: yarn # Install all dependencies
       - uses: ./
         with:
@@ -64,9 +64,9 @@ jobs:
           SECOND_URL: ${{ env.SECOND_URL }}
 
   should-not-fail-on-retrieving:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: yarn # Install all dependencies
       - uses: ./
         with:

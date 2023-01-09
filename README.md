@@ -20,7 +20,7 @@ jobs:
   # On some job, do some stuff an persist variables meant to be re-used in other jobs
   compute-data:
     name: Compute data
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       # Do your own internal business logic...
       - name: Compute ressource
@@ -41,7 +41,7 @@ jobs:
   # In another job, read the previously stored variable and use it
   retrieve-data:
     name: Find & re-use data
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     needs: compute-data
     steps:
       - name: Import variable MAGIC_NUMBER

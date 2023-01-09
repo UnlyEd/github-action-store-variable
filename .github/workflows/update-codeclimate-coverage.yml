@@ -9,27 +9,27 @@ name: Update Code Climate test coverage
 on:
   push:
     branches:
-      - 'main' # Change this branch name by your CodeClimate "main" branch use
+      - main # Change this branch name by your CodeClimate "main" branch use
 
 jobs:
   # Configures the deployment environment, install dependencies (like node, npm, etc.) that are requirements for the upcoming jobs
   # Ex: Necessary to run `yarn test:coverage`
   setup-environment:
-    name: Setup deployment environment (Ubuntu 18.04 - Node 12.x)
-    runs-on: ubuntu-18.04
+    name: Setup deployment environment (Ubuntu 22.04 - Node 18.x)
+    runs-on: ubuntu-22.04
     steps:
       - name: Installing node.js
-        uses: actions/setup-node@v1 # Used to install node environment - XXX https://github.com/actions/setup-node
+        uses: actions/setup-node@v3 # Used to install node environment - XXX https://github.com/actions/setup-node
         with:
-          node-version: '16.x' # Use the same node.js version as the one Vercel's uses (currently node16.x)
+          node-version: 18 # Use the same node.js version as the one Vercel's uses (currently node18.x)
   run-tests-coverage:
     name: Run tests coverage and send report to Code Climate
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Installing dependencies
         run: yarn install
-      - uses: paambaati/codeclimate-action@v2.7.5
+      - uses: paambaati/codeclimate-action@v3.2.0
         env:
           # XXX Necessary for running tests properly (required). Do not generate the token from a Vercel account with actual production usage. (use a dummy account)
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }} # XXX Define this secret in "Github repo > Settings > Secrets", you can get it from Vercel at https://vercel.com/account/tokens
