@@ -16,12 +16,6 @@ on:
   push:
 
 jobs:
-  # We want to wait for the 
-  await-release:
-    name: Sleep for 30 seconds
-    run: sleep 30s
-    shell: bash
-    
   # On some job, do some stuff and persist variables meant to be re-used in other jobs
   compute-data:
     name: Compute data
@@ -58,30 +52,6 @@ jobs:
             MAGIC_NUMBER
       - name: Debug output
         run: echo "We have access to $MAGIC_NUMBER"
-
-  save-many-variables-by-using-custom-delimiter:
-    name: Save many variables by using a custom delimiter (comma)
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Export variable for next jobs
-        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
-        with:
-          delimiter: ','
-          variables: FOO=BAR,STAGE=production
-
-  retrieve-data-saved-with-a-custom-delimiter:
-    name: Retrieve variables using a custom delimiter
-    runs-on: ubuntu-22.04
-    needs: save-many-variables-by-using-custom-delimiter
-    steps:
-      - name: Import variable MAGIC_NUMBER
-        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
-        with:
-          delimiter: ';'
-          variables: FOO;STAGE
-          failIfNotFound: true
-      - name: Debug output
-        run: echo "Found FOO=$FOO and STAGE=$STAGE"
 ```
 
 > If you want to see a real output, check out the output of our code snippet example [here](https://github.com/UnlyEd/github-action-store-variable/actions/runs/537556204).
