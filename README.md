@@ -240,11 +240,43 @@ Our versioning process is completely automated, any changes landing on the `main
 
 ## Releases versions:
 
-- We do not provide major versions that are automatically updated (e.g: `v1`).
-- We only provide tags/releases that are not meant to be changed once released (e.g: `v1.1.0`).
+The examples above use an auto-updated major version tag (`@v1`).
+It is also possible to use the `@latest` and `@latest-rc` tags.  (RC stands for "Release candidate", which is similar to
+a Beta version)
 
-> As utility, we provide a special [`latest`](../../releases/tag/latest) tag which is automatically updated to the latest release.
-> _This tag/release is **not meant to be used in production systems**, as it is not reliable (might jump to the newest MAJOR version at any time)._
+While those options can be useful, we intend to give some "production-grade" best practices.
+
+- **Do NOT use `@latest` for production**, ever. While only "supposed-to-be-stable" versions will be tagged
+  as `@latest`, it could harbor bugs nonetheless.
+- You can use auto-upgrading major version, such as `@v1`, but this is not a best practice, see our explanations below.
+
+### Special tags and production-grade apps best practices
+
+Here are a few useful options you can use to pin a more-or-less specific version of our GitHub Action, alongside some "
+production-grade" best practices.
+
+- `@{COMMIT-SHA}`, e.g: `@1271dc3fc4c4c8bc62ba5a4e248dac95cb82d0e3`, recommended for all production-grade apps, it's the
+  only truly safe way to pinpoint a version that cannot change against your will (**SAFEST**)
+- `@{MAJOR}-{MINOR}-{PATCH}`, e.g: `@v1.2.31`, while not as safe as the `COMMIT-SHA` way, it's what most people use (
+  SAFER)
+- `@{MAJOR}`, e.g: `@v1`, can be used on production, but we do not advise to do so (SAFE-ISH)
+- `@{MAJOR}-rc`, e.g: `@v1-rc`, **reserved for development mode**, useful when debugging on a specific prerelease
+  version (UNSAFE)
+- `@latest`, **reserved for development mode**, useful when debugging (UNSAFE)
+- `@latest-rc`, **reserved for development mode**, useful when debugging on prerelease versions (UNSAFE)
+
+**"But, what is the issue with the `@{MAJOR}-{MINOR}-{PATCH}` way to pin a specific version"?**
+
+> Well, if this repository gets hacked by a 3rd party, **they can easily change all Git tags to a different commit**,
+which could contain malicious code.
+
+That's why **pinning a specific commit SHA is the only truly safe option**. This way, the code you're using **cannot be
+changed against your will**.
+
+Most people won't care about this and will use a MAJOR version tag instead anyway, such as `@v1`. It's common, but not
+the best practice.
+
+It all comes down to the risks you're ready to take, and it's up to you to decide what's best in your situation.
 
 ---
 
