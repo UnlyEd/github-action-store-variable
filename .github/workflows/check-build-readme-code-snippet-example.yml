@@ -1,22 +1,29 @@
 # Summary:
-# Test actual example used in README.md
-# Makes sure the GitHub Action builds when being built by GitHub Actions.
+# Tests the example used in README.md, to make sure the example we show is always working.
 #
-# See https://github.com/actions/checkout https://github.com/actions/checkout/releases/tag/v2
+# See https://github.com/actions/checkout https://github.com/actions/checkout/releases/tag/v3
 
 name: 'GitHub Action code snippet'
 on:
   push:
-    branches:
-      - '*'
+
 jobs:
-  # On some job, do some stuff an persist variables meant to be re-used in other jobs
+  # We want to wait for the auto-git-release-x to be done, so that we always test the MAJOR version that was just updated
+  await-release:
+    name: Sleep for 45 seconds
+    runs-on: ubuntu-22.04
+    steps:
+      - run: sleep 45s
+        shell: bash
+
+  # On some job, do some stuff and persist variables meant to be re-used in other jobs
   compute-data:
     name: Compute data
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
+    needs: await-release
     steps:
       # Do your own internal business logic...
-      - name: Compute ressource
+      - name: Compute resources
         run: |
           MAGIC_NUMBER=42
           echo "Found universal answer: $MAGIC_NUMBER"
@@ -24,8 +31,8 @@ jobs:
           echo "MAGIC_NUMBER=$MAGIC_NUMBER" >> $GITHUB_ENV
 
       # XXX We recommend to export all your variables at once, at the end of your job
-      - name: Export variable for next jobs
-        uses: UnlyEd/github-action-store-variable@v2.1.1 # See https://github.com/UnlyEd/github-action-store-variable
+      - name: Export variable MAGIC_NUMBER for next jobs
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           # Persist (store) our MAGIC_NUMBER ENV variable into our store, for the next jobs
           variables: |
@@ -34,11 +41,11 @@ jobs:
   # In another job, read the previously stored variable and use it
   retrieve-data:
     name: Find & re-use data
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     needs: compute-data
     steps:
       - name: Import variable MAGIC_NUMBER
-        uses: UnlyEd/github-action-store-variable@v2.1.1 # See https://github.com/UnlyEd/github-action-store-variable
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           # List all variables you want to retrieve from the store
           # XXX They'll be automatically added to your ENV
@@ -48,22 +55,22 @@ jobs:
         run: echo "We have access to $MAGIC_NUMBER"
 
   save-many-variables-by-using-custom-delimiter:
-    name: Save many variable by using a custom delimiter (comma)
-    runs-on: ubuntu-18.04
+    name: Save many variables by using a custom delimiter (comma)
+    runs-on: ubuntu-22.04
     steps:
       - name: Export variable for next jobs
-        uses: UnlyEd/github-action-store-variable@v2.1.1 # See https://github.com/UnlyEd/github-action-store-variable
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           delimiter: ','
           variables: FOO=BAR,STAGE=production
 
   retrieve-data-saved-with-a-custom-delimiter:
-    name: Retrieve data saved with a custom delimiter
-    runs-on: ubuntu-18.04
+    name: Retrieve variables using a custom delimiter
+    runs-on: ubuntu-22.04
     needs: save-many-variables-by-using-custom-delimiter
     steps:
       - name: Import variable MAGIC_NUMBER
-        uses: UnlyEd/github-action-store-variable@v2.1.1 # See https://github.com/UnlyEd/github-action-store-variable
+        uses: UnlyEd/github-action-store-variable@v3 # See https://github.com/UnlyEd/github-action-store-variable
         with:
           delimiter: ';'
           variables: FOO;STAGE

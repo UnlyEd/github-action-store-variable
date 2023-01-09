@@ -3,21 +3,18 @@
 # Makes sure the GitHub Action works properly when running on a clean machine, without building anything (integration test).
 # This integration test will break if the Vercel project or deployment are deleted, or if the VERCEl_TOKEN doesn't have access to the deployment url.
 #
-# See https://github.com/actions/checkout https://github.com/actions/checkout/releases/tag/v2
+# See https://github.com/actions/checkout https://github.com/actions/checkout/releases/tag/v3
 
 name: 'GitHub Action integration test'
 on:
   pull_request:
   push:
-    branches:
-      - main
-      - 'releases/*'
 
 jobs:
-  run-integration-test:
-    runs-on: ubuntu-18.04
+  run-integration-test1:
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: yarn # Install all dependencies
       - uses: ./
         id: store-variables
@@ -28,11 +25,11 @@ jobs:
           echo "Exported variable URL=$URL"
         env:
           URL: ${{ env.URL }}
-  second-test:
-    runs-on: ubuntu-18.04
-    needs: run-integration-test
+  run-integration-test2:
+    runs-on: ubuntu-22.04
+    needs: run-integration-test1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: yarn # Install all dependencies
       - uses: ./
         with:
@@ -45,11 +42,11 @@ jobs:
         env:
           URL: ${{ env.URL }}
           SECOND_URL: ${{ env.SECOND_URL }}
-  third-test:
-    runs-on: ubuntu-18.04
-    needs: second-test
+  run-integration-test3:
+    runs-on: ubuntu-22.04
+    needs: run-integration-test2
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: yarn # Install all dependencies
       - uses: ./
         with:
@@ -63,13 +60,13 @@ jobs:
           URL: ${{ env.URL }}
           SECOND_URL: ${{ env.SECOND_URL }}
 
-  should-not-fail-on-retrieving:
-    runs-on: ubuntu-18.04
+  should-not-fail-on-retrieving-UNKNOWN_VAR:
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: yarn # Install all dependencies
       - uses: ./
         with:
           variables: |
-            RANDOM_VAR
-          failIfNotFound: false # default is false
+            UNKNOWN_VAR
+          failIfNotFound: false # Default is false

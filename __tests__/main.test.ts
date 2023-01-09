@@ -9,13 +9,9 @@ import { BUILD_DIR, BUILD_MAIN_FILENAME } from '../src/config';
  * @see https://stackoverflow.com/a/42304473/2391795
  */
 declare global {
-  namespace NodeJS {
-    interface Global {
-      muteConsole: () => any;
-      muteConsoleButLog: () => any;
-      unmuteConsole: () => any;
-    }
-  }
+  let muteConsole: () => any;
+  let muteConsoleButLog: () => any;
+  let unmuteConsole: () => any;
 }
 
 /**
@@ -52,11 +48,12 @@ function exec_lib(options: cp.ExecFileSyncOptions): string {
 }
 
 describe('Functional test', () => {
-  const CORRECT_DOMAIN: string = `${process.env.VERCEL_DOMAIN}`;
-  const WRONG_DOMAIN: string = 'i-am-wrong.vercel.app';
+  const CORRECT_DOMAIN = `${process.env.VERCEL_DOMAIN}`;
+  const WRONG_DOMAIN = 'i-am-wrong.vercel.app';
 
   describe('should pass when', () => {
     beforeEach(() => {
+      // @ts-ignore
       global.console = global.unmuteConsole();
     });
 
