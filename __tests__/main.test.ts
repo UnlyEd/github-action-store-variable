@@ -33,7 +33,7 @@ function exec_lib(options: cp.ExecFileSyncOptions): string {
   /**
    * Path of the compiled version of the Action file entrypoint.
    *
-   * @example .../github-action-await-vercel/lib/main.js
+   * @example .../github-action-store-variable/lib/main.js
    */
   const mainFilePath = path.join(__dirname, '..', BUILD_DIR, BUILD_MAIN_FILENAME);
 

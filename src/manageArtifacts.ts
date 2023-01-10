@@ -13,7 +13,9 @@ import rimraf from 'rimraf';
 import { ArtifactClient, UploadOptions } from '@actions/artifact';
 import { UploadResponse } from '@actions/artifact/lib/internal/upload-response';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const artifact = require('@actions/artifact');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const io = require('@actions/io');
 
 const defineVariableOperation = (variable: string): VariableStatus => {
@@ -64,7 +66,7 @@ const storeArtifact = async (variables: VariableDetail[], failIfNotFound: boolea
       core.debug(`Imported ${variable.key}=${variable.value} and exported it back as ENV var`);
     }
   } catch (error) {
-    const message: string = `Error while uploading artifact: ${error?.message}`;
+    const message = `Error while uploading artifact: ${error?.message}`;
     if (failIfNotFound) {
       core.setFailed(message);
     } else {
@@ -86,7 +88,7 @@ const retrieveArtifact = async (variables: VariableDetail[], failIfNotFound: boo
       core.exportVariable(variable.key, variable.value);
       core.debug(`Exported ${variable.key}=${variable.value} as ENV var`);
     } catch (error) {
-      const message: string = `Cannot retrieve variable ${variable.key}`;
+      const message = `Cannot retrieve variable ${variable.key}`;
       if (failIfNotFound) {
         core.setFailed(message);
       } else {
@@ -106,22 +108,29 @@ const manageArtifacts = async (variables: string, delimiter: string, failIfNotFo
       console.log(error);
     }
   }
+
+  const artifactToStore = variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 0).map((variable: VariableStatus) => variable.detail);
+  core.debug(`Artifact to store: ${JSON.stringify(artifactToStore)}`);
   await storeArtifact(
-    variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 0).map((variable: VariableStatus) => variable.detail),
-    failIfNotFound,
-  );
-  await retrieveArtifact(
-    variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 1).map((variable: VariableStatus) => variable.detail),
+    artifactToStore,
     failIfNotFound,
   );
 
-  const variablesResult = variablesDetail.reduce(
+  const artifactToRetrieve = variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 1).map((variable: VariableStatus) => variable.detail);
+  core.debug(`Artifact to retrieve: ${JSON.stringify(artifactToStore)}`);
+  await retrieveArtifact(
+    artifactToRetrieve,
+    failIfNotFound,
+  );
+
+  const result = variablesDetail.reduce(
     (variablesObject, variableToExport) => ({
       ...variablesObject,
       [variableToExport.detail.key]: variableToExport.detail.value,
     }),
     {},
   );
+  core.debug(`result: ${JSON.stringify(result)}`);
 };
 
 export default manageArtifacts;
