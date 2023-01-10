@@ -79,8 +79,9 @@ jobs:
           # Delete and create the release again
           gh release delete v${{steps.next_semantic_version.outputs.major}}-rc --cleanup-tag --yes
           
-          gh release edit v${{steps.next_semantic_version.outputs.major}}-rc \
+          gh release create v${{steps.next_semantic_version.outputs.major}}-rc \
           --title "v${{steps.next_semantic_version.outputs.major}}-rc MAJOR release (auto-updated)" \
+          --generate-notes \
           --prerelease \
           --target "${{github.sha}}"
         env:

@@ -88,9 +88,9 @@ jobs:
           # Delete and create the release again
           gh release delete v${{steps.next_semantic_version.outputs.major}} --cleanup-tag --yes
           
-          # Update GitHub Release then (update the time of last update of the release)
-          gh release edit v${{steps.next_semantic_version.outputs.major}} \
+          gh release create v${{steps.next_semantic_version.outputs.major}} \
           --title "v${{steps.next_semantic_version.outputs.major}} MAJOR release (auto-updated)" \
+          --generate-notes \
           --target "${{github.sha}}"
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -122,9 +122,9 @@ jobs:
           # Delete and create the release again
           gh release delete v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}} --cleanup-tag --yes
           
-          # Update GitHub Release then (update the time of last update of the release)
-          gh release edit v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}} \
+          gh release create v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}} \
           --title "v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}} MINOR release (auto-updated)" \
+          --generate-notes \
           --target "${{github.sha}}"
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
