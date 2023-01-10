@@ -60,13 +60,8 @@ jobs:
             CHANGELOG.md
 
       - name: Updating Git release tag for the major "v${{steps.next_semantic_version.outputs.major}}-rc" version
-        uses: ncipollo/release-action@v1
-        with: # See https://github.com/softprops/action-gh-release#-customizing
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          tag: "v${{steps.next_semantic_version.outputs.major}}-rc"
-          name: "v${{steps.next_semantic_version.outputs.major}}-rc latest release (auto-update)"
-          allowUpdates: true
-          prerelease: true
-          generateReleaseNotes: true
-          artifacts: |
-            CHANGELOG.md
+        run: |
+          gh release create "v${{steps.next_semantic_version.outputs.version}}" \
+          --title "Automatic release v${{steps.next_semantic_version.outputs.version}}" \
+          --generate-notes
+          --prerelease
