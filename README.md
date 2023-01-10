@@ -246,9 +246,9 @@ While those options can be useful, we intend to give some "production-grade" bes
 
 - **Do NOT use `@latest` for production**, ever. While only "supposed-to-be-stable" versions will be tagged
   as `@latest`, it could harbor bugs nonetheless.
-- You can use auto-upgrading major version, such as `@v1`, but this is not a best practice, see our explanations below.
+- You can use auto-upgrading major version, such as `@v1` or `@v1.2`, but this is not always the best practice, see our explanations below.
 
-### Special tags and production-grade apps best practices
+### Special tags and best practices for production-grade apps
 
 Here are a few useful options you can use to pin a more-or-less specific version of our GitHub Action, alongside some "
 production-grade" best practices.
@@ -259,6 +259,9 @@ production-grade" best practices.
   SAFER)
 - `@{MAJOR}`, e.g: `@v1`, can be used on production, but we do not advise to do so (SAFE-ISH)
 - `@{MAJOR}-rc`, e.g: `@v1-rc`, **reserved for development mode**, useful when debugging on a specific prerelease
+  version (UNSAFE)
+- `@{MAJOR}.{MINOR}`, e.g: `@v1.2`, can be used on production, but we do not advise to do so (SAFE-ISH)
+- `@{MAJOR}.{MINOR}-rc`, e.g: `@v1.2-rc`, **reserved for development mode**, useful when debugging on a specific prerelease
   version (UNSAFE)
 - `@latest`, **reserved for development mode**, useful when debugging (UNSAFE)
 
@@ -271,7 +274,7 @@ That's why **pinning a specific commit SHA is the only truly safe option**. This
 changed against your will**.
 
 Most people won't care about this and will use a MAJOR version tag instead anyway, such as `@v1`. It's common, but not
-the best practice.
+often the best practice.
 
 It all comes down to the risks you're ready to take, and it's up to you to decide what's best in your situation.
 
