@@ -240,8 +240,7 @@ Our versioning process is completely automated, any changes landing on the `main
 ## Releases versions:
 
 The examples above use an auto-updated major version tag (`@v1`).
-It is also possible to use the `@latest` and `@latest-rc` tags.  (RC stands for "Release candidate", which is similar to
-a Beta version)
+It is also possible to use the `@latest` tag.  (RC stands for "Release candidate", which is similar to a Beta version)
 
 While those options can be useful, we intend to give some "production-grade" best practices.
 
@@ -262,7 +261,6 @@ production-grade" best practices.
 - `@{MAJOR}-rc`, e.g: `@v1-rc`, **reserved for development mode**, useful when debugging on a specific prerelease
   version (UNSAFE)
 - `@latest`, **reserved for development mode**, useful when debugging (UNSAFE)
-- `@latest-rc`, **reserved for development mode**, useful when debugging on prerelease versions (UNSAFE)
 
 **"But, what is the issue with the `@{MAJOR}-{MINOR}-{PATCH}` way to pin a specific version"?**
 

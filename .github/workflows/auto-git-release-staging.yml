@@ -48,34 +48,25 @@ jobs:
           echo "current_commit: ${{steps.next_semantic_version.outputs.current_commit}}"
 
       - name: Creating Git release tag for the "v${{steps.next_semantic_version.outputs.version}}" version
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with: # See https://github.com/softprops/action-gh-release#-customizing
           token: "${{ secrets.GITHUB_TOKEN }}"
-          tag_name: "v${{steps.next_semantic_version.outputs.version}}"
+          tag: "v${{steps.next_semantic_version.outputs.version}}"
           name: "Automatic release v${{steps.next_semantic_version.outputs.version}}"
+          allowUpdates: false
           prerelease: true
-          generate_release_notes: true
-          files: |
-            CHANGELOG.md
-
-      - name: Updating Git release tag for "latest-rc" version
-        uses: softprops/action-gh-release@v1
-        with: # See https://github.com/softprops/action-gh-release#-customizing
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          tag_name: latest-rc
-          name: "Latest release (auto-update) - UNSAFE for production usage"
-          prerelease: true
-          generate_release_notes: true
-          files: |
+          generateReleaseNotes: true
+          artifacts: |
             CHANGELOG.md
 
       - name: Updating Git release tag for the major "v${{steps.next_semantic_version.outputs.major}}-rc" version
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with: # See https://github.com/softprops/action-gh-release#-customizing
           token: "${{ secrets.GITHUB_TOKEN }}"
-          tag_name: "v${{steps.next_semantic_version.outputs.major}}-rc"
+          tag: "v${{steps.next_semantic_version.outputs.major}}-rc"
           name: "v${{steps.next_semantic_version.outputs.major}}-rc latest release (auto-update)"
+          allowUpdates: true
           prerelease: true
-          generate_release_notes: true
-          files: |
+          generateReleaseNotes: true
+          artifacts: |
             CHANGELOG.md
