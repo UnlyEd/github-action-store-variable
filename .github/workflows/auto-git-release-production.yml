@@ -69,6 +69,8 @@ jobs:
           tag: "v${{steps.next_semantic_version.outputs.major}}"
           name: "v${{steps.next_semantic_version.outputs.major}} latest release (auto-update)"
           allowUpdates: true
+          removeArtifacts: true
+          replacesArtifacts: true
           prerelease: false
           generateReleaseNotes: true
           artifacts: |
