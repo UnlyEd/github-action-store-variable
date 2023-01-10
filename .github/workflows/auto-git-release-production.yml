@@ -82,15 +82,11 @@ jobs:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
       # See https://cli.github.com/manual/gh_release_edit
-      - name: Updating existing release for the major "v${{steps.next_semantic_version.outputs.major}}" version
+      - name: Recreating existing release for the major "v${{steps.next_semantic_version.outputs.major}}" version
         if: ${{ steps.majorTagExists.outputs.exists == 'true' }}
         run: |
-          git config --global user.name "GitHub Action Releaser"
-          git config --global user.email "auto-releaser@github.unly.org"
-          
-          # Update Git tag first (changes the commit associated with the tag)
-          git tag -m "" -f -a v${{steps.next_semantic_version.outputs.major}} ${{github.sha}}
-          git push -f origin refs/tags/v${{steps.next_semantic_version.outputs.major}}
+          # Delete and create the release again
+          gh release delete v${{steps.next_semantic_version.outputs.major}} --cleanup-tag --yes
           
           # Update GitHub Release then (update the time of last update of the release)
           gh release edit v${{steps.next_semantic_version.outputs.major}} \
@@ -120,15 +116,11 @@ jobs:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
       # See https://cli.github.com/manual/gh_release_edit
-      - name: Updating existing release for the minor "v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}}" version
+      - name: Recreating existing release for the minor "v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}}" version
         if: ${{ steps.minorTagExists.outputs.exists == 'true' }}
         run: |
-          git config --global user.name "GitHub Action Releaser"
-          git config --global user.email "auto-releaser@github.unly.org"
-          
-          # Update Git tag first (changes the commit associated with the tag)
-          git tag -m "" -f -a v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}} ${{github.sha}}
-          git push -f origin refs/tags/v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}}
+          # Delete and create the release again
+          gh release delete v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}} --cleanup-tag --yes
           
           # Update GitHub Release then (update the time of last update of the release)
           gh release edit v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}} \
