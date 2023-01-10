@@ -117,13 +117,16 @@ describe('Functional test', () => {
           expect(output.includes('::debug::Using delimiter: ","')).toBe(true);
         });
 
-        test('output should NOT display warning about VAR1 not being found (because it was set)', () => {
-          expect(output.includes('::warning::Cannot retrieve variable VAR1')).toBe(false);
-        });
+        // Only run those tests on GitHub Actions, as they would fail when ran locally
+        if(typeof process.env.GITHUB_ENV !== 'undefined'){
+          test('output should NOT display warning about VAR1 not being found (because it was set)', () => {
+            expect(output.includes('::warning::Cannot retrieve variable VAR1')).toBe(false);
+          });
 
-        test('output should NOT display warning about VAR2 not being found (because it was set)', () => {
-          expect(output.includes('::warning::Cannot retrieve variable VAR2')).toBe(false);
-        });
+          test('output should NOT display warning about VAR2 not being found (because it was set)', () => {
+            expect(output.includes('::warning::Cannot retrieve variable VAR2')).toBe(false);
+          });
+        }
       });
     });
   });
