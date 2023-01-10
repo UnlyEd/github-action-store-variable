@@ -109,19 +109,17 @@ const manageArtifacts = async (variables: string, delimiter: string, failIfNotFo
     }
   }
 
-  const artifactToStore = variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 0).map((variable: VariableStatus) => variable.detail);
+  const artifactToStore = variablesDetail
+    .filter((variable: VariableStatus) => variable.operationToProceed === 0)
+    .map((variable: VariableStatus) => variable.detail);
   core.debug(`Artifact to store: ${JSON.stringify(artifactToStore)}`);
-  await storeArtifact(
-    artifactToStore,
-    failIfNotFound,
-  );
+  await storeArtifact(artifactToStore, failIfNotFound);
 
-  const artifactToRetrieve = variablesDetail.filter((variable: VariableStatus) => variable.operationToProceed === 1).map((variable: VariableStatus) => variable.detail);
+  const artifactToRetrieve = variablesDetail
+    .filter((variable: VariableStatus) => variable.operationToProceed === 1)
+    .map((variable: VariableStatus) => variable.detail);
   core.debug(`Artifact to retrieve: ${JSON.stringify(artifactToStore)}`);
-  await retrieveArtifact(
-    artifactToRetrieve,
-    failIfNotFound,
-  );
+  await retrieveArtifact(artifactToRetrieve, failIfNotFound);
 
   const result = variablesDetail.reduce(
     (variablesObject, variableToExport) => ({
