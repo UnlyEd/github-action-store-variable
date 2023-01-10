@@ -19,7 +19,10 @@ jobs:
         with:
           fetch-depth: 0 # Force fetch all commits - See https://github.com/PaulHatch/semantic-version#important-note-regarding-the-checkout-action
 
-      - run: "echo \"$GITHUB_SHA: ${{ GITHUB_SHA }}\""
+      - run: "echo \"GITHUB_SHA: ${{ github.sha }}\""
+
+#      - name: Expose GitHub slug/short variables # See https://github.com/rlespinasse/github-slug-action#exposed-github-environment-variables
+#        uses: rlespinasse/github-slug-action@v4.4.0 # See https://github.com/rlespinasse/github-slug-action
 
       # Outputs documentation: https://github.com/PaulHatch/semantic-version/blob/master/src/main.ts#L22-L33
       - name: Resolving next Release Candidate version using semantic-version
@@ -67,7 +70,7 @@ jobs:
           --title "v${{steps.next_semantic_version.outputs.major}}-rc MAJOR release (auto-updated)" \
           --generate-notes \
           --prerelease \
-          --target $GITHUB_SHA
+          --target "${{github.sha}}"
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
@@ -78,7 +81,7 @@ jobs:
           gh release edit v${{steps.next_semantic_version.outputs.major}}-rc \
           --title "v${{steps.next_semantic_version.outputs.major}}-rc MAJOR release (auto-updated)" \
           --prerelease \
-          --target $GITHUB_SHA
+          --target "${{github.sha}}"
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
@@ -99,7 +102,7 @@ jobs:
           --title "v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}}-rc MINOR release (auto-updated)" \
           --generate-notes \
           --prerelease \
-          --target $GITHUB_SHA
+          --target "${{github.sha}}"
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
@@ -110,6 +113,6 @@ jobs:
           gh release edit v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}}-rc \
           --title "v${{steps.next_semantic_version.outputs.major}}.${{steps.next_semantic_version.outputs.minor}}-rc MINOR release (auto-updated)" \
           --prerelease \
-          --target $GITHUB_SHA
+          --target "${{github.sha}}"
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
