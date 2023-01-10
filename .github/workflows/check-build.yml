@@ -21,3 +21,5 @@ jobs:
           yarn
           yarn build:once
           yarn test:once
+          yarn lint
+          yarn format:preview
