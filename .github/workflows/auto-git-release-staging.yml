@@ -19,6 +19,8 @@ jobs:
         with:
           fetch-depth: 0 # Force fetch all commits - See https://github.com/PaulHatch/semantic-version#important-note-regarding-the-checkout-action
 
+      - run: "echo \"$GITHUB_SHA: ${{ GITHUB_SHA }}\""
+
       # Outputs documentation: https://github.com/PaulHatch/semantic-version/blob/master/src/main.ts#L22-L33
       - name: Resolving next Release Candidate version using semantic-version
         uses: paulhatch/semantic-version@v5.0.2
