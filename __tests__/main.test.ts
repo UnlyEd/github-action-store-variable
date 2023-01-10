@@ -33,7 +33,7 @@ function exec_lib(options: cp.ExecFileSyncOptions): string {
   /**
    * Path of the compiled version of the Action file entrypoint.
    *
-   * @example .../github-action-await-vercel/lib/main.js
+   * @example .../github-action-store-variable/lib/main.js
    */
   const mainFilePath = path.join(__dirname, '..', BUILD_DIR, BUILD_MAIN_FILENAME);
 
@@ -48,26 +48,55 @@ function exec_lib(options: cp.ExecFileSyncOptions): string {
 }
 
 describe('Functional test', () => {
-  const CORRECT_DOMAIN = `${process.env.VERCEL_DOMAIN}`;
-  const WRONG_DOMAIN = 'i-am-wrong.vercel.app';
-
   describe('should pass when', () => {
     beforeEach(() => {
       // @ts-ignore
       global.console = global.unmuteConsole();
     });
 
-    describe('using special delimiter', () => {
+    describe('when storing variables using a special delimiter', () => {
       const options: cp.ExecFileSyncOptions = {
         env: {
-          INPUT_VARIABLES: 'VAR=TEST,OTHER_VAR=OTHER_TEST,RETRIEVE',
+          INPUT_VARIABLES: 'VAR=TEST,OTHER_VAR=OTHER_TEST,UNKNOWN_VAR',
           INPUT_DELIMITER: ',',
         },
       };
-      const filteredContent = exec_lib(options);
-      test('test', () => {
-        expect(filteredContent.includes(',')).toBe(true);
-        console.log(filteredContent);
+      const output = exec_lib(options);
+      console.log('output:\n', output);
+
+      test('output should display all received variables', () => {
+        expect(output.includes('::debug::Received variables: VAR=TEST,OTHER_VAR=OTHER_TEST,UNKNOWN_VAR')).toBe(true);
+      });
+
+      test('output should display used delimiter', () => {
+        expect(output.includes('::debug::Using delimiter: ","')).toBe(true);
+      });
+
+      test('output should display warning about UNKNOWN_VAR not being found', () => {
+        expect(output.includes('::warning::Cannot retrieve variable UNKNOWN_VAR')).toBe(true);
+      });
+    });
+
+    describe('when storing variables', () => {
+      const options: cp.ExecFileSyncOptions = {
+        env: {
+          INPUT_VARIABLES: 'VAR1=1,VAR2=SOME_STRING',
+          INPUT_DELIMITER: ',',
+        },
+      };
+      const output = exec_lib(options);
+      console.log('output:\n', output);
+
+      test('output should display all received variables', () => {
+        expect(output.includes('::debug::Received variables: VAR1=1,VAR2=SOME_STRING')).toBe(true);
+      });
+
+      test('output should display used delimiter', () => {
+        expect(output.includes('::debug::Using delimiter: ","')).toBe(true);
+      });
+
+      test('output should NOT display warning about UNKNOWN_VAR not being found (because we did not try to read it)', () => {
+        expect(output.includes('::warning::Cannot retrieve variable UNKNOWN_VAR')).toBe(false);
       });
     });
   });

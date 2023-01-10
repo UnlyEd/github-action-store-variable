@@ -7,4 +7,4 @@ assignees: ''
 
 ---
 
-Please ask questions in the [Discussions](https://github.com/UnlyEd/github-action-await-vercel/discussions)! :)
+Please ask questions in the [Discussions](https://github.com/UnlyEd/github-action-store-variable/discussions)! :)
