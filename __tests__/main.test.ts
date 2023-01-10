@@ -1,7 +1,7 @@
 import * as cp from 'child_process';
 import * as path from 'path';
 import * as process from 'process';
-import { BUILD_DIR, BUILD_MAIN_FILENAME } from '../src/config';
+import {BUILD_DIR, BUILD_MAIN_FILENAME} from '../src/config';
 
 /**
  * Enhance the Node.js environment "global" variable to add our own types
@@ -99,26 +99,25 @@ describe('Functional test', () => {
         expect(output.includes('::warning::Cannot retrieve variable UNKNOWN_VAR')).toBe(false);
       });
 
-      describe(`when retrieving previously stored variables`, () => {
-        const options: cp.ExecFileSyncOptions = {
-          env: {
-            INPUT_VARIABLES: 'VAR1,VAR2',
-            INPUT_DELIMITER: ',',
-          },
-        };
-        const output = exec_lib(options);
-        console.log('output:\n', output);
+      // Only run those tests on GitHub Actions, as they would fail when ran locally
+      if (typeof process.env.GITHUB_ENV !== 'undefined') {
+        describe(`when retrieving previously stored variables (tests suite executed on GitHub Actions only, not locally)`, () => {
+          const options: cp.ExecFileSyncOptions = {
+            env: {
+              INPUT_VARIABLES: 'VAR1,VAR2',
+              INPUT_DELIMITER: ',',
+            },
+          };
+          const output = exec_lib(options);
+          console.log('output:\n', output);
 
-        test('output should display all received variables', () => {
-          expect(output.includes('::debug::Received variables: VAR1,VAR2')).toBe(true);
-        });
+          test('output should display all received variables', () => {
+            expect(output.includes('::debug::Received variables: VAR1,VAR2')).toBe(true);
+          });
 
-        test('output should display used delimiter', () => {
-          expect(output.includes('::debug::Using delimiter: ","')).toBe(true);
-        });
-
-        // Only run those tests on GitHub Actions, as they would fail when ran locally
-        if(typeof process.env.GITHUB_ENV !== 'undefined'){
+          test('output should display used delimiter', () => {
+            expect(output.includes('::debug::Using delimiter: ","')).toBe(true);
+          });
           test('output should NOT display warning about VAR1 not being found (because it was set)', () => {
             expect(output.includes('::warning::Cannot retrieve variable VAR1')).toBe(false);
           });
@@ -126,8 +125,8 @@ describe('Functional test', () => {
           test('output should NOT display warning about VAR2 not being found (because it was set)', () => {
             expect(output.includes('::warning::Cannot retrieve variable VAR2')).toBe(false);
           });
-        }
-      });
+        });
+      }
     });
   });
 });
