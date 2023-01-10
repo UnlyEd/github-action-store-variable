@@ -59,11 +59,11 @@ jobs:
           artifacts: |
             CHANGELOG.md
 
-      - name: Check if tag "v${{steps.next_semantic_version.outputs.version}}" exists
+      - name: Check if tag "v${{steps.next_semantic_version.outputs.major}}-rc" exists
         uses: mukunku/tag-exists-action@v1.2.0
         id: majorTagExists
         with:
-          tag: "v${{steps.next_semantic_version.outputs.version}}"
+          tag: "v${{steps.next_semantic_version.outputs.major}}-rc"
 
       - name: Creating new release for the major "v${{steps.next_semantic_version.outputs.major}}-rc" version
         if: ${{ !steps.majorTagExists.outputs.exists }}
