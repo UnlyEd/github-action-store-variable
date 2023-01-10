@@ -65,3 +65,5 @@ jobs:
           --title "Automatic release v${{steps.next_semantic_version.outputs.version}}" \
           --generate-notes
           --prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
