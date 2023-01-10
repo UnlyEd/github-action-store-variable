@@ -61,8 +61,8 @@ jobs:
 
       - name: Updating Git release tag for the major "v${{steps.next_semantic_version.outputs.major}}-rc" version
         run: |
-          gh release create "v${{steps.next_semantic_version.outputs.version}}" \
-          --title "Automatic release v${{steps.next_semantic_version.outputs.version}}" \
+          gh release edit "v${{steps.next_semantic_version.outputs.major}}-rc" \
+          --title "v${{steps.next_semantic_version.outputs.major}}-rc latest release (auto-update)" \
           --generate-notes
           --prerelease
         env:
