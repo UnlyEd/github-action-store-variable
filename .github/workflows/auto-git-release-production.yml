@@ -3,6 +3,7 @@
 #
 # See https://github.com/PaulHatch/semantic-version https://github.com/PaulHatch/semantic-version/tree/v5.0.2
 # See https://github.com/softprops/action-gh-release https://github.com/softprops/action-gh-release/tree/v1
+# See https://github.com/Actions-R-Us/actions-tagger https://github.com/Actions-R-Us/actions-tagger/releases/tag/v2.0.3
 
 name: 'Auto release'
 on:
@@ -70,8 +71,6 @@ jobs:
           files: |
             CHANGELOG.md
 
-# TODO les versions majeures ne sont pas màj
-      # la version dans GHA marketplace est pas màj
       - name: Updating Git release tag for the major "v${{steps.next_semantic_version.outputs.major}}" version
         uses: softprops/action-gh-release@v1
         with: # See https://github.com/softprops/action-gh-release#-customizing
@@ -82,3 +81,8 @@ jobs:
           generate_release_notes: true
           files: |
             CHANGELOG.md
+
+      - name: Release on GitHub Actions Marketplace
+        uses: Actions-R-Us/actions-tagger@v2.0.3
+        with:
+          token: "${{ github.token }}"
