@@ -63,7 +63,6 @@ jobs:
         run: |
           gh release edit "v${{steps.next_semantic_version.outputs.major}}-rc" \
           --title "v${{steps.next_semantic_version.outputs.major}}-rc latest release (auto-update)" \
-          --generate-notes
           --prerelease
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
