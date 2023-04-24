@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Installing dependencies
         run: yarn install
-      - uses: paambaati/codeclimate-action@v3.2.0
+      - uses: paambaati/codeclimate-action@v4.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # XXX Define this secret in "Github repo > Settings > Secrets", you can get it from Code Climate in "Repo settings > Test coverage".
         with:
