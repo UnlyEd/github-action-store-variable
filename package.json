@@ -32,7 +32,7 @@
   "author": "UnlyEd",
   "license": "MIT",
   "dependencies": {
-    "@actions/artifact": "0.5.0",
+    "@actions/artifact": "2.2.1",
     "@actions/core": "1.10.0",
     "@actions/io": "1.0.2",
     "@types/rimraf": "3.0.0",
@@ -58,5 +58,8 @@
     "prettier": "2.8.2",
     "ts-jest": "29.0.3",
     "typescript": "4.9.4"
+  },
+  "resolutions": {
+    "wrap-ansi": "7.0.0"
   }
 }

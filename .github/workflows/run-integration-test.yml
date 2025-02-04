@@ -23,10 +23,16 @@ jobs:
         with:
           variables: |
             URL=https://github.com
+      # Next step: verify that the variable has been saved in the ENV.
       - run: |
-          echo "Exported variable URL=$URL"
+          if [ -z "$URL" ]; then
+            echo "Error: github-action-store-variable lib did not save 'URL' to ENV as expected. The library is not working as intended."
+            exit 1
+          fi
+          echo "Exported variable URL is: $URL"
         env:
           URL: ${{ env.URL }}
+
   run-integration-test2:
     runs-on: ubuntu-22.04
     needs: run-integration-test1
@@ -41,12 +47,22 @@ jobs:
           variables: |
             URL
             SECOND_URL=https://github.com/UnlyEd
+      # Next step: verify that both URL and SECOND_URL were propagated.
       - run: |
-          echo "Found from previous job URL=$URL"
-          echo "Exported variable SECOND_URL=$SECOND_URL"
+          if [ -z "$URL" ]; then
+            echo "Error: github-action-store-variable lib did not propagate 'URL' to the environment as expected. The library is not working as intended."
+            exit 1
+          fi
+          if [ -z "$SECOND_URL" ]; then
+            echo "Error: github-action-store-variable lib did not save 'SECOND_URL' to ENV as expected. The library is not working as intended."
+            exit 1
+          fi
+          echo "Found from previous job, URL is: $URL"
+          echo "Exported variable SECOND_URL is: $SECOND_URL"
         env:
           URL: ${{ env.URL }}
           SECOND_URL: ${{ env.SECOND_URL }}
+
   run-integration-test3:
     runs-on: ubuntu-22.04
     needs: run-integration-test2
@@ -61,9 +77,18 @@ jobs:
           variables: |
             URL
             SECOND_URL
+      # Next step: verify that URL and SECOND_URL are available.
       - run: |
-          echo "Found from previous job URL=$URL"
-          echo "Found from previous job SECOND_URL=$SECOND_URL"
+          if [ -z "$URL" ]; then
+            echo "Error: github-action-store-variable lib did not propagate 'URL' to the environment as expected. The library is not working as intended."
+            exit 1
+          fi
+          if [ -z "$SECOND_URL" ]; then
+            echo "Error: github-action-store-variable lib did not propagate 'SECOND_URL' to the environment as expected. The library is not working as intended."
+            exit 1
+          fi
+          echo "Found from previous job, URL is: $URL"
+          echo "Found from previous job, SECOND_URL is: $SECOND_URL"
         env:
           URL: ${{ env.URL }}
           SECOND_URL: ${{ env.SECOND_URL }}
@@ -80,4 +105,4 @@ jobs:
         with:
           variables: |
             UNKNOWN_VAR
-          failIfNotFound: false # Default is false
+          failIfNotFound: false # Default is false, so missing UNKNOWN_VAR is allowed.
