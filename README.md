@@ -8,6 +8,107 @@
 
 # GitHub Action - Store variables between your jobs
 
+## Overview
+
+This GitHub Action was originally created **in 2021** to allow you to **store variables** in a global store and then **read them in
+later jobs**—something that was not natively possible in GitHub Actions. It automatically adds read variables to
+your `${{ env }}` so that they become available for subsequent steps.
+
+## But… GitHub Actions native outputs make this library largely unnecessary!
+
+### What Are Native Outputs?
+
+GitHub Actions now provides native support for sharing data between jobs through the use of step outputs and job
+outputs. You can:
+
+- **Set a step output:** Write key/value pairs to `$GITHUB_OUTPUT` in a step.
+- **Define job outputs:** Map outputs from a step to a job-level output.
+- **Access job outputs:** In downstream jobs, access these outputs using the `needs` context.
+
+Similarly, the `$GITHUB_ENV` file allows you to persist environment variables across steps in the same job.
+
+Source: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/passing-information-between-jobs
+
+### Why Is This a Game Changer?
+
+Originally, this library provided a way to emulate global variable sharing:
+
+- **Before:** GitHub Actions did not support sharing environment variables between jobs.
+- **Now:** Native outputs let you write a variable in one job and read it in another without extra actions or artifacts.
+
+This native support simplifies your workflows, reduces dependencies, and improves reliability.
+
+---
+
+## Converting a Use Case
+
+### Old Approach (Using `UnlyEd/github-action-store-variable`) - ⚠️ DEPRECATED
+
+Below is an example of how you might have stored and retrieved a variable with the library:
+
+```yaml
+jobs:
+  compute-data:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Compute data
+        run: |
+          MY_VAR="Hello, World!"
+          echo "MY_VAR=$MY_VAR" >> $GITHUB_ENV
+
+      - name: Store variable using the library
+        uses: UnlyEd/github-action-store-variable@v2.1.0
+        with:
+          variables: |
+            MY_VAR=${{ env.MY_VAR }}
+
+  use-data:
+    runs-on: ubuntu-22.04
+    needs: compute-data
+    steps:
+      - name: Retrieve variable using the library
+        uses: UnlyEd/github-action-store-variable@v2.1.0
+        with:
+          variables: |
+            MY_VAR
+      - name: Use variable
+        run: echo "MY_VAR is $MY_VAR"
+```
+
+### New Approach (Using Native Outputs)
+Here’s how you can achieve the same result without an external action:
+
+```yaml
+jobs:
+  compute-data:
+    runs-on: ubuntu-22.04
+    outputs:
+      MY_VAR: ${{ steps.set-output.outputs.MY_VAR }}
+    steps:
+      - name: Compute data
+        run: |
+          MY_VAR="Hello, World!"
+          echo "MY_VAR=$MY_VAR" >> $GITHUB_ENV
+
+      - name: Set step output
+        id: set-output
+        run: |
+          # Export MY_VAR as a step output, so it can be mapped to the job output
+          echo "MY_VAR=${MY_VAR}" >> $GITHUB_OUTPUT
+
+  use-data:
+    runs-on: ubuntu-22.04
+    needs: compute-data
+    steps:
+      - name: Use variable from job outputs
+        run: echo "MY_VAR is ${{ needs.compute-data.outputs.MY_VAR }}"
+
+```
+
+---
+
+# Former documentation
+
 ## Code snippet example (minimal example)
 
 ```yaml
