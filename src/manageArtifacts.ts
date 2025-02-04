@@ -10,8 +10,8 @@ import * as core from '@actions/core';
 import { VariableDetail, VariableStatus } from './types/variableStatus';
 import { WORKDIR } from './config';
 import rimraf from 'rimraf';
-import { ArtifactClient, UploadOptions } from '@actions/artifact';
-import { UploadResponse } from '@actions/artifact/lib/internal/upload-response';
+import { ArtifactClient } from '@actions/artifact';
+import { UploadInputs } from './types/upload-artifact/upload-inputs';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const artifact = require('@actions/artifact');
@@ -45,10 +45,11 @@ const defineVariableOperation = (variable: string): VariableStatus => {
 
 const storeArtifact = async (variables: VariableDetail[], failIfNotFound: boolean): Promise<void> => {
   const client: ArtifactClient = artifact.create();
-  const artifactOptions: UploadOptions = {
+  const artifactOptions: Partial<UploadInputs> = {
     retentionDays: 1, // Only keep artifacts 1 day to avoid reach limit: https://github.com/actions/toolkit/blob/c861dd8859fe5294289fcada363ce9bc71e9d260/packages/artifact/src/internal/upload-options.ts#L1
   };
-  const artifactsUploadPromises: Promise<UploadResponse>[] = [];
+  // Used to be able to use type "UploadResponse" but it's not exported by the lib in v2 anymore
+  const artifactsUploadPromises: Promise<any>[] = [];
 
   rimraf.sync(WORKDIR);
   mkdirSync(WORKDIR);
@@ -83,6 +84,7 @@ const retrieveArtifact = async (variables: VariableDetail[], failIfNotFound: boo
   for (const variable of variables) {
     try {
       const file = join(WORKDIR, `${variable.key}.txt`);
+      // @ts-ignore
       await client.downloadArtifact(variable.key);
       variable.value = readFileSync(file, { encoding: 'utf8' }).toString();
       core.exportVariable(variable.key, variable.value);
