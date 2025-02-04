@@ -12,7 +12,7 @@ import { WORKDIR } from './config';
 import rimraf from 'rimraf';
 import { ArtifactClient } from '@actions/artifact';
 import { UploadInputs } from './types/upload-artifact/upload-inputs';
-import { DefaultArtifactClient} from '@actions/artifact';
+import { DefaultArtifactClient } from '@actions/artifact';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const io = require('@actions/io');
