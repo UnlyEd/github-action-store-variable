@@ -22,14 +22,14 @@ jobs:
           node-version: '20'
       - run: |
           yarn
-          echo "Running yarn build:once"
+          echo "👉 Running yarn build:once"
           yarn build:once
 
-          echo "Running yarn test:once"
+          echo "👉 Running yarn test:once"
           yarn test:once
 
-          echo "Running yarn lint"
+          echo "👉 Running yarn lint"
           yarn lint
 
-          echo "Running yarn format:preview"
+          echo "👉 Running yarn format:preview"
           yarn format:preview
