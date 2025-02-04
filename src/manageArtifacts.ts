@@ -12,9 +12,8 @@ import { WORKDIR } from './config';
 import rimraf from 'rimraf';
 import { ArtifactClient } from '@actions/artifact';
 import { UploadInputs } from './types/upload-artifact/upload-inputs';
+import { DefaultArtifactClient} from '@actions/artifact';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const artifact = require('@actions/artifact');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const io = require('@actions/io');
 
@@ -44,7 +43,7 @@ const defineVariableOperation = (variable: string): VariableStatus => {
 };
 
 const storeArtifact = async (variables: VariableDetail[], failIfNotFound: boolean): Promise<void> => {
-  const client: ArtifactClient = artifact.create();
+  const client: ArtifactClient = new DefaultArtifactClient();
   const artifactOptions: Partial<UploadInputs> = {
     retentionDays: 1, // Only keep artifacts 1 day to avoid reach limit: https://github.com/actions/toolkit/blob/c861dd8859fe5294289fcada363ce9bc71e9d260/packages/artifact/src/internal/upload-options.ts#L1
   };
@@ -77,7 +76,7 @@ const storeArtifact = async (variables: VariableDetail[], failIfNotFound: boolea
 };
 
 const retrieveArtifact = async (variables: VariableDetail[], failIfNotFound: boolean): Promise<void> => {
-  const client: ArtifactClient = artifact.create();
+  const client: ArtifactClient = new DefaultArtifactClient();
 
   rimraf.sync(WORKDIR);
   mkdirSync(WORKDIR);
